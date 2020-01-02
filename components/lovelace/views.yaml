@@ -1,0 +1,8 @@
+- !include /config/components/lovelace/views/home_view.yaml
+- !include /config/components/lovelace/views/climate_view.yaml
+- !include /config/components/lovelace/views/light_view.yaml
+- !include /config/components/lovelace/views/heating_view.yaml
+- !include /config/components/lovelace/views/camera_view.yaml
+- !include /config/components/lovelace/views/energy_view.yaml
+- !include /config/components/lovelace/views/system_view.yaml
+- !include /config/components/lovelace/views/VS_Code.yaml

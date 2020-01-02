@@ -1,0 +1,22 @@
+[
+    {
+        "complete": false,
+        "id": "eaa895650b624bde88472408c71e1389",
+        "name": "Fibaro Chaudi\u00e8re"
+    },
+    {
+        "complete": false,
+        "id": "91ed939d230d4396be28215db8893792",
+        "name": "Schedy schedule chaudiere"
+    },
+    {
+        "complete": false,
+        "id": "f863255e76bc450082d6baca78572e1b",
+        "name": "- Monster card condition + Glance card + ...( CF Visonic cards ) pour groupes par tranche de batteries restante"
+    },
+    {
+        "complete": false,
+        "id": "8467e7ad6ecd442a8f2626f040c77795",
+        "name": "- Ajout attribut du type de piles dans les sensors/ binary_sensors"
+    }
+]

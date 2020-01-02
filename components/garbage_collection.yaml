@@ -1,0 +1,48 @@
+sensors:
+- name: "Poubelle" # Each week on Monday and Friday
+  frequency: "weekly"
+  collection_days:
+  - tue
+  - sat
+  verbose_state: True
+  verbose_format: "{date}"
+  date_format: "%d %b"
+  
+- name: "Carton" # Every weeks on Tuesday
+  frequency: "weekly"
+  collection_days:
+  - wed
+  verbose_state: True
+  verbose_format: "{date}"
+  date_format: "%d %b"
+  
+- name: "Végétaux" # weekly  on Tuesday. Between March and November
+  frequency: "weekly"
+  first_month: "apr"
+  last_month: "nov"
+  collection_days: "tue"
+  include_dates:
+  - '2019-12-03'
+  - '2019-12-17'
+  verbose_state: True
+  verbose_format: "{date}"
+  date_format: "%d %b"
+
+- name: "Verre" # Every 2 weeks on Tuesday, starting on 4th week each year
+  frequency: "every-n-weeks"
+  collection_days: "wed"
+  period: 2
+  first_week: 2
+  verbose_state: True
+  verbose_format: "{date}"
+  date_format: "%d %b"
+
+- name: "Encombrants" # First and 4th friday each month
+  frequency: "monthly"
+  collection_days: "fri"
+  weekday_order_number: 
+  - 2
+  - 4
+  verbose_state: True
+  verbose_format: "{date}"
+  date_format: "%d %b"

@@ -1,0 +1,18 @@
+type: entities
+title: Notifications
+icon: []
+show_header_toggle: false
+style: |
+  ha-card {
+    font-size: 12px;
+    padding: 0px 0px 0px 0px  !important;
+    margin: -8px 0px 0px 0px  !important;
+  }
+  .card-header{
+      font-size:20px;
+    
+entities:
+  - input_boolean.mode_absence
+  - input_boolean.notify_visonic_ext
+  - input_boolean.notify_visonic_int
+  - input_boolean.notify_visonic_all

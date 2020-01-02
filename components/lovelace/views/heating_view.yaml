@@ -1,0 +1,8 @@
+path: heating
+title: Thermostats
+
+cards:
+  - type: thermostat
+    entity: climate.salon
+  - type: thermostat
+    entity: climate.chambre3

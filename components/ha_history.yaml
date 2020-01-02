@@ -1,0 +1,71 @@
+include:
+  entities:
+    - alarm_control_panel.visonic_alarm
+    - binary_sensor.visonic_z01
+    - binary_sensor.visonic_z02
+    - binary_sensor.visonic_z03
+    - binary_sensor.visonic_z04
+    - binary_sensor.visonic_z05
+    - binary_sensor.visonic_z06
+    - binary_sensor.visonic_z07
+    - binary_sensor.visonic_z08
+    - binary_sensor.visonic_z09
+    - binary_sensor.visonic_z10
+    - binary_sensor.visonic_z11
+    - binary_sensor.visonic_z12
+    - binary_sensor.visonic_z13
+    - binary_sensor.visonic_z14
+    - binary_sensor.visonic_z15
+    - sensor.humidity_buanderie
+    - sensor.humidity_bureau
+    - sensor.humidity_chambre1
+    - sensor.humidity_chambre2
+    - sensor.humidity_chambre3
+    - sensor.humidity_cuisine
+    - sensor.humidity_entree
+    - sensor.humidity_garage
+    - sensor.humidity_grenier
+    - sensor.humidity_palier1er
+    - sensor.humidity_palier2eme
+    - sensor.humidity_salon
+    - sensor.humidity_sdb
+    - sensor.temperature_buanderie
+    - sensor.temperature_bureau
+    - sensor.temperature_chambre1
+    - sensor.temperature_chambre2
+    - sensor.temperature_chambre3
+    - sensor.temperature_cuisine
+    - sensor.temperature_entree
+    - sensor.temperature_garage
+    - sensor.temperature_grenier
+    - sensor.temperature_palier1er
+    - sensor.temperature_palier2eme
+    - sensor.temperature_salon
+    - sensor.temperature_sdb
+    - sensor.powerplug_deshumidificateur_current
+    - sensor.powerplug_deshumidificateur_power
+    - sensor.powerplug_laundry_current
+    - sensor.powerplug_laundry_power
+    - sensor.plug_deshumidificateur_garage_current
+    - sensor.plug_deshumidificateur_garage_power
+    - switch.powerplug_deshumidificateur
+    - switch.powerplug_laundry_switch
+    - switch.plug_deshumidificateur_garage_current
+    - binary_sensor.washer_on
+    
+#  domains:
+#    - visonic
+#    - zwave
+#    - deconz
+#    - esphome
+#
+#    
+#exclude:
+#  domains:
+#    - automation
+#    - weblink
+#    - updater
+#  entities:
+#    - sun.sun
+#    - person.olivier
+#    - sensor.time#

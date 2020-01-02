@@ -1,0 +1,11 @@
+- platform: template
+  sensors:
+    washer_on:
+      friendly_name: "Lave-Linge"
+      device_class: power
+      delay_on:
+        minutes: 5
+      delay_off: 
+        minutes: 15
+      value_template: >
+        {{ states('sensor.powerplug_laundry_power')| float > 50 }}

@@ -1,0 +1,8 @@
+badges:
+cards:
+  - type: 'custom:linky-card'
+    title: Consomation Electrique
+    entity: sensor.custom_linky
+    show_header_toggle: false
+path: energy
+title: Fournisseurs energie

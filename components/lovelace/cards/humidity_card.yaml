@@ -1,0 +1,36 @@
+type: glance
+columns: 4
+entities:
+  - sensor.humidity_entree
+  - sensor.humidity_salon
+  - sensor.humidity_bureau
+  - sensor.humidity_buanderie
+  - sensor.humidity_cuisine
+  - sensor.humidity_palier1er
+  - sensor.humidity_chambre1
+  - sensor.humidity_chambre2
+  - sensor.humidity_grenier
+  - sensor.humidity_chambre3
+  - sensor.humidity_sdb
+  - sensor.humidity_palier2eme
+  - sensor.humidity_garage
+
+
+
+style: |
+  ha-card {
+    padding: 0px 0px 0px 0px  !important;
+    margin: 0px 0px 0px 0px  !important;
+  }
+  .entity {
+    margin: 0px 0 20px 0 !important;
+    padding:0px;
+  }
+  .name { 
+   //white-space: pre-line !important;
+   //height: 4em !important;
+  }
+  state-badge {
+    margin-bottom:-25px 0 0px 0 !important;
+  }
+ 

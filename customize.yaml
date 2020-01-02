@@ -1,0 +1,30 @@
+sun.sun:
+  hidden: true
+sensor.yr_symbol:
+  hidden: true
+binary_sensor.visonic_z01:
+  device_class: door
+binary_sensor.visonic_z09:
+  device_class: door
+binary_sensor.visonic_z08:
+  device_class: door
+binary_sensor.visonic_z07:
+  device_class: smoke
+  icon: mdi:fire
+binary_sensor.visonic_z15:
+  device_class: smoke
+  icon: mdi:fire
+light.chambre3:
+  homebridge_hidden: true
+switch.powerplug_laundry_switch:
+  homebridge_hidden: true
+zwave.powerplug_laundry:
+  homebridge_hidden: true
+light.veilleuse_cold:
+  homebridge_hidden: true
+light.veilleuse_cold_warm:
+  homebridge_hidden: true
+light.veilleuse_rgb:
+  homebridge_hidden: true
+switch.zigbee_plug_osram:
+  homebridge_hidden: true

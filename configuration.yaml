@@ -1,0 +1,113 @@
+homeassistant: !include components/homeassistant.yaml
+frontend: !include components/frontend.yaml
+api:
+http:
+  base_url: 192.168.1.1:8123
+lovelace:
+  mode: yaml
+recorder: !include components/ha_recorder.yaml
+history: !include components/ha_history.yaml
+default_config:
+hassio:
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+notify: !include components/notify.yaml
+shopping_list:
+
+#snips: 
+#intent_script: !include components/snips.yaml
+
+climate: !include components/thermostats.yaml
+#customizer:
+# custom_ui: local
+
+logger:
+  default: error
+  logs:
+    #homeassistant.components.homekit: debug
+    #pyhap: debug
+    #homeassistant.helpers.intent: debug
+    #homeassistant.components.snips: debug
+    #custom_components.visonic: debug
+    #custom_components.visonic.pyvisonic: debug
+    #custom_components.visonic.alarm_control_panel: debug
+    #custom_components.visonic.binary_sensor: debug
+    #custom_components.visonic.switch: debug
+    #custom_components.visonic.__init__: debug
+    #homeassistant.components.onvif.camera: debug
+    #homeassistant.components.camera: debug
+    #zeep.asyncio.transport: debug
+    #zeep.asyncio: debug
+    homeassistant.components.homekit: debug
+    pyhap: debug
+
+visonic: !include components/visonic.yaml
+
+influxdb: !include components/influxdb.yaml
+
+meteo_france: !include components/meteo_france.yaml
+  
+stream:
+camera: !include components/cameras.yaml
+
+garbage_collection: !include components/garbage_collection.yaml
+
+
+# linky, time_date ...
+sensor: !include_dir_merge_list components/sensors/
+
+# lave-linge template ...    
+binary_sensor: !include_dir_merge_list components/binary_sensors/
+
+# visonic notify buttons...
+input_boolean: !include_dir_merge_named components/input_booleans/
+ 
+homekit: 
+  auto_start: false
+  filter:
+    include_entities:
+      - light.applique_salon
+      - light.buanderie
+      - light.bureau
+      - light.chambre1
+      - light.chambre2
+      - light.cuisine_evier
+      - light.cuisine_plafonnier
+      - light.entree
+      - light.grp_escalier
+      #- light.salon
+      - light.veilleuse_warm
+      #- light.chambre3
+      #- light.palier1er
+      #- light.palier2eme
+      #- light.veilleuse_rgb
+      - sensor.temperature_entree
+      - sensor.temperature_buanderie
+      - sensor.temperature_salon
+      - sensor.temperature_bureau
+      - sensor.temperature_cuisine
+      - sensor.temperature_chambre1
+      - sensor.temperature_chambre2
+      - sensor.temperature_chambre3
+      - sensor.temperature_sdb
+      #- sensor.temperature_palier1er
+      #- sensor.temperature_palier2eme
+
+
+#zwave:
+#  network_key: "0x43, 0x56, 0x01, 0x3A, 0x28, 0xA4, 0xB3, 0xB4, 0x7A, 0xD7, 0xDD, 0x99, 0x94, 0xD3, 0x89, 0x40"
+#  usb_path: /dev/ttyAMA0
+  
+
+# Discover some devices automatically
+#discovery:
+#  ignore:
+#    - apple_tv
+#    - samsung_tv
+
+
+# Text to speech
+#tts:
+#  - platform: google_translate
+

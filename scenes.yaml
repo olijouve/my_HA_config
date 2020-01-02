@@ -1,0 +1,8 @@
+- id: '1575331759222'
+  name: biberon soir
+  entities: {}
+- id: '1575331800628'
+  name: Nouvelle Scène
+  entities:
+    light.cuisine_plafonnier:
+      state: 'off'

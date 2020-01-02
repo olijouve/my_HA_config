@@ -1,0 +1,61 @@
+type: 'custom:auto-entities'
+show_empty: false
+filter:
+  include:
+    - attributes:
+        battery_level: "=0"
+      entity_id: "binary_sensor.visonic*"
+      options:
+        icon: 'mdi:battery-10'
+        tap_action:
+          action: call-service
+          service: visonic.alarm_sensor_bypass
+          service_data:
+            bypass: 'True'
+            entity_id: this.entity_id
+card:
+  type: glance
+  columns: 5
+  show_state: false
+  theme: visonic-lowbattery
+  style: |
+    ha-card {
+      font-size: 12px;
+      padding: 0px 0px 0px 0px  !important;
+      margin: -5px 0px 0px 0px  !important;
+      border-shadow: none !important;
+      border: none !important;
+
+    }
+    .entity {
+      margin: -5px 0 8px 0 !important;
+      padding:0px;
+      font-size: 12px;
+    }
+    .name { 
+      white-space: pre-line !important;
+     height: 4em !important;
+    }
+    state-badge {
+      margin:-10px 0 0 0 !important;
+      padding:0 0 0 0 !important;
+    }
+    .card-header{
+      font-size: var(--ha-card-header-font-size, 16px);
+      padding: 8px 8px 0px;  !important;
+      margin: 0px 0px 0px 0px  !important;
+    }
+    .entities.no-header {
+    padding:0 0 0 0 !important;
+    }
+    hui-glance-card {
+      margin:0px 0px 0px 0px !important;
+      border: none !important;
+      border-shadow: none !important;
+
+    }          
+    :host {
+      margin:0px 0px 0px 0px !important;
+      border: none !important;
+      border-shadow: none !important;
+    }

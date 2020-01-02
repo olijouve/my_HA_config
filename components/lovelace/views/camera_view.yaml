@@ -1,0 +1,76 @@
+
+
+badges: []
+path: cameras
+panel: false
+title: Camera
+
+cards:
+   
+
+  - type: "custom:camera-card"
+    entity: camera.camera_stream
+    camera_view: live
+    
+#  - type: picture-glance
+#    title: Living room
+#    camera_image: camera.camera_stream
+#    #camera_image: camera.camera_stream
+#    camera_view: live
+#    entities: []
+
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: entity-button
+            entity: camera.onvifcam
+            icon: mdi:arrow-up-bold-outline
+            show_name: false
+            tap_action:
+              action: call-service
+              service: camera.onvif_ptz
+              service_data:
+                zoom: ZOOM_OUT
+                move_mode: ContinuousMove
+          - type: entity-button
+            entity: camera.onvifcam
+            icon: mdi:arrow-up-bold-outline
+            show_name: false
+            tap_action:
+              action: call-service
+              service: camera.onvif_ptz
+              service_data:
+                tilt: UP
+                move_mode: ContinuousMove
+      - type: horizontal-stack
+        cards:
+          - type: entity-button
+            entity: camera.onvifcam
+            icon: mdi:arrow-left-bold-outline
+            show_name: false
+            tap_action:
+              action: call-service
+              service: camera.onvif_ptz
+              service_data:
+                pan: LEFT
+          - type: entity-button
+            entity: camera.onvifcam
+            icon: mdi:arrow-right-bold-outline
+            show_name: false
+            tap_action:
+              action: call-service
+              service: camera.onvif_ptz
+              service_data:
+                pan: RIGHT
+      - type: horizontal-stack
+        cards:
+          - type: entity-button
+            entity: camera.onvifcam
+            icon: mdi:arrow-down-bold-outline
+            show_name: false
+            tap_action:
+              action: call-service
+              service: camera.onvif_ptz
+              service_data:
+                tilt: DOWN

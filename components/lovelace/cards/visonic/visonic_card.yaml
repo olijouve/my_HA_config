@@ -1,0 +1,35 @@
+type: 'custom:vertical-stack-in-card'
+cards:
+
+  - type: 'custom:alarm_control_panel-card'
+    entity: alarm_control_panel.visonic_alarm
+    title: Visonic PowerMax Pro
+    style: |
+      --alarm-color-disarmed: var(--label-badge-blue);
+      button{
+          padding: 0px 4px 0px 4px !important;
+      }
+      .card-header{
+          font-size:20px;
+      }
+    states:
+      - arm_home
+      - arm_away
+    show_label_ids: false
+    labels:
+      ui.card.alarm_control_panel.arm_home: 'Armer (Home)'
+      ui.card.alarm_control_panel.arm_away: 'Armer (Away)'
+      state.alarm_control_panel.arm_away: Away!!
+
+  - !include /config/components/lovelace/cards/visonic/sensors_list.yaml
+  
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - !include /config/components/lovelace/cards/visonic/bypass_set.yaml
+          - !include /config/components/lovelace/cards/visonic/bypass_unset.yaml
+          
+      - !include /config/components/lovelace/cards/visonic/sensors_lowbattery.yaml
+      
+  - !include /config/components/lovelace/cards/visonic/notification_booleans.yaml

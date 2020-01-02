@@ -1,0 +1,31 @@
+- platform: generic_thermostat
+  name: salon
+  heater: switch.powerplug_deshumidificateur
+  target_sensor: sensor.temperature_salon
+  min_temp: 15
+  max_temp: 25
+  ac_mode: false
+  target_temp: 17
+  hot_tolerance: 0.5
+  min_cycle_duration:
+    seconds: 30
+  keep_alive:
+    minutes: 3
+  away_temp: 16
+  precision: 0.5
+  
+- platform: generic_thermostat
+  name: chambre3
+  heater: switch.powerplug_deshumidificateur
+  target_sensor: sensor.temperature_chambre3
+  min_temp: 15
+  max_temp: 25
+  ac_mode: false
+  target_temp: 21
+  hot_tolerance: 0.5
+  min_cycle_duration:
+    seconds: 30
+  keep_alive:
+    minutes: 3
+  away_temp: 17
+  precision: 0.5

@@ -1,0 +1,6 @@
+resources: !include /config/components/lovelace/ressources.yaml
+cch: !include /config/components/lovelace/compact_custom_headers.yaml
+         
+    
+title: Home
+views: !include /config/components/lovelace/views.yaml

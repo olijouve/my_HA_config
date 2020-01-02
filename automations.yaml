@@ -1,0 +1,156 @@
+- alias: Trigger group visonic_ext 22h 07h30 disarmed absence off
+  trigger:
+  - platform: state
+    entity_id: group.visonic_ext
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+    - condition: time
+      after: '22:00:00'
+      before: 07:30:00
+    - condition: state
+      entity_id: input_boolean.notify_visonic_ext
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.mode_absence
+      state: 'off'
+    - condition: state
+      entity_id: alarm_control_panel.visonic_alarm
+      state: disarmed
+  action:
+    service: notify.notify_pushover
+    data_template:
+      title: Trigger Capteur mode nuit
+      message: "{% for entity in trigger.to_state.attributes.entity_id -%}\n  {% if\
+        \ states(entity) == 'on' %}\n    {{ state_attr(entity, 'friendly_name') }}\
+        \ has been triggered\n  {% endif -%}\n{% endfor %}"
+  id: a0ea48e833d14523ad171b94be013181
+- alias: Trigger group visonic_all if mode_absence or Alarm armed
+  trigger:
+  - platform: state
+    entity_id: group.visonic_all
+    to: 'on'
+  condition:
+    condition: or
+    conditions:
+    - condition: state
+      entity_id: input_boolean.mode_absence
+      state: 'on'
+    - condition: state
+      entity_id: alarm_control_panel.visonic_alarm
+      state: armed_home
+    - condition: state
+      entity_id: alarm_control_panel.visonic_alarm
+      state: armed_away
+  action:
+    service: notify.notify_pushover
+    data_template:
+      title: Trigger Alarme mode absence
+      message: "{% for entity in trigger.to_state.attributes.entity_id -%}\n  {% if\
+        \ states(entity) == 'on' %}\n    {{ state_attr(entity, 'friendly_name') }}\
+        \ has been triggered\n  {% endif -%}\n{% endfor %} {% for (attr) in (\"Panel\
+        \ Siren Active\",\"Panel Alarm Status\",\"Panel Status\",\"Panel Last Event\"\
+        ) -%}\n     {{ attr }}: {{ state_attr('alarm_control_panel.visonic_alarm',\
+        \ attr) }}\n{% endfor %}"
+  id: 96bfa72f83d64b64a06087cc73a1da83
+- id: bdf94f6968214c31a52aedeac7f22712
+  alias: zwave Central button Scene Button 3 - meuble Télé
+  trigger:
+  - event_data:
+      entity_id: zwave.hank_electronics_ltd_hkzw_scn04_scene_controller_2
+      scene_id: 3
+    event_type: zwave.scene_activated
+    platform: event
+  action:
+  - entity_id: switch.powerplug_12a_switch_1
+    service: switch.toggle
+  initial_state: true
+- alias: Programme lave-linge terminé
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.washer_on
+    from: 'on'
+    to: 'off'
+  action:
+  - service: notify.notify_pushover
+    data:
+      title: Programme lave-linge terminé
+      message: Mettre le linge au sèche-linge
+  id: 988484ba077449a0a232db7773edb9bf
+- id: '1573170828946'
+  alias: 'Déshumidificateur Buanderie : Auto start at 57%H'
+  description: ''
+  trigger:
+  - above: '57'
+    entity_id: sensor.humidity_buanderie
+    platform: numeric_state
+  condition: []
+  action:
+  - device_id: 5a786e6285874130af038634a8b44207
+    domain: switch
+    entity_id: switch.powerplug_deshumidificateur
+    type: turn_on
+- id: '1573171628696'
+  alias: 'Déshumidificateur Buanderie : Auto stop at 55%H'
+  description: ''
+  trigger:
+  - below: '55'
+    entity_id: sensor.humidity_buanderie
+    platform: numeric_state
+  condition: []
+  action:
+  - device_id: 5a786e6285874130af038634a8b44207
+    domain: switch
+    entity_id: switch.powerplug_deshumidificateur
+    type: turn_off
+- id: '1573426406246'
+  alias: 'Déshumidificateur Buanderie : Notif bac plein'
+  description: ''
+  trigger:
+  - entity_id: switch.powerplug_deshumidificateur
+    for: 00:10:00
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - below: '1'
+    condition: numeric_state
+    entity_id: sensor.powerplug_deshumidificateur_power
+  action:
+  - data:
+      message: Bac plein
+      title: Déhumidificateur Buanderie
+    service: notify.notify_pushover
+- id: '1573434261660'
+  alias: 'Déshumidificateur Garage : Auto start at 00:01'
+  description: ''
+  trigger:
+  - at: '17:42:00'
+    platform: time
+  condition: []
+  action:
+  - device_id: eb4b8615b4ff48da820f26a72d2a1628
+    domain: switch
+    entity_id: switch.plug_deshumidificateur_garage_switch
+    type: turn_on
+- id: '1573434350597'
+  alias: 'Déshumidificateur Garage : Auto stop at 02:01 '
+  description: ''
+  trigger:
+  - at: 02:01:00
+    platform: time
+  condition: []
+  action:
+  - device_id: eb4b8615b4ff48da820f26a72d2a1628
+    domain: switch
+    entity_id: switch.plug_deshumidificateur_garage_switch
+    type: turn_off
+- id: '1573434950999'
+  alias: Start HomeKit
+  trigger:
+  - event: start
+    platform: homeassistant
+  action:
+  - delay: 00:02
+  - service: homekit.start

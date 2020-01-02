@@ -1,0 +1,77 @@
+title: Climat
+panel: false
+path: climate
+badges: []
+cards:
+  - type: history-graph
+    title: 'Température pièces de vie'
+    entities:
+      - sensor.temperature_salon
+      - sensor.temperature_bureau
+      - sensor.temperature_cuisine
+
+  - type: history-graph
+    title: 'Humidité pièces de vie'
+    entities:
+      - sensor.humidity_salon
+      - sensor.humidity_bureau
+      - sensor.humidity_cuisine
+
+  - type: history-graph
+    title: 'Température Chambres'
+    entities:
+      - sensor.temperature_chambre1
+      - sensor.temperature_chambre2
+      - sensor.temperature_chambre3
+
+  - type: history-graph
+    title: 'Humidité Chambres'
+    entities:
+      - sensor.humidity_chambre1
+      - sensor.humidity_chambre2
+      - sensor.humidity_chambre3
+
+  - type: history-graph
+    title: 'Température Paliers'
+    entities:
+      - sensor.temperature_entree
+      - sensor.temperature_palier1er
+      - sensor.temperature_palier2eme
+      
+  - type: history-graph
+    title: 'Humidité Paliers'
+    entities:
+      - sensor.humidity_entree
+      - sensor.humidity_palier1er
+      - sensor.humidity_palier2eme
+      
+  - type: history-graph
+    title: 'Température autres'
+    entities:
+      - sensor.temperature_sdb
+      - sensor.temperature_buanderie
+      - sensor.temperature_grenier
+      - sensor.temperature_garage
+
+  - type: history-graph
+    title: 'Humidité autres'
+    entities:
+      - sensor.humidity_sdb
+      - sensor.humidity_buanderie
+      - sensor.humidity_grenier
+      - sensor.humidity_garage
+
+  - type: history-graph
+    title: 'Température maison'
+    entities:
+      - sensor.temperature_entree
+      - sensor.temperature_buanderie
+      - sensor.temperature_salon
+      - sensor.temperature_bureau
+      - sensor.temperature_cuisine
+      - sensor.temperature_palier1er
+      - sensor.temperature_chambre1
+      - sensor.temperature_chambre2
+      - sensor.temperature_palier2eme
+      - sensor.temperature_chambre3
+      - sensor.temperature_sdb

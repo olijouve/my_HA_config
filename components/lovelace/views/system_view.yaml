@@ -1,0 +1,19 @@
+path: system
+title: System
+
+badges:
+  - sensor.hacs
+cards:
+  - type: 'custom:list-card'
+    entity: sensor.hacs
+    feed_attribute: repositories
+    title: HA Community Store
+    columns:
+      - field: name
+        title: Name
+      - field: installed version
+        title: Installed
+      - field: available version
+        title: Latest
+ 
+  - type: shopping-list    

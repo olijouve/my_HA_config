@@ -1,0 +1,10 @@
+swipe: true
+swipe_amount: '30'
+exceptions:
+  - conditions:
+      user: Laetitia
+    config:
+      hide_help: true
+      hide_config: true
+      hide_unused: true
+      show_tabs: '0,1,2'

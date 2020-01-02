@@ -1,0 +1,14 @@
+device:
+  type: ethernet
+  host: '192.168.1.10'
+  port: 2323
+motion_off: 120
+language: 'FR'
+force_standard: 'no'
+sync_time: 'yes'
+allow_remote_arm: 'yes'
+allow_remote_disarm: 'yes'
+override_code: !secret visonic_override_code
+download_code: !secret visonic_download_code
+arm_without_usercode: 'yes'
+exclude_x10: [0,1,2,3,4,5,6,7,8,9,13,14,15]

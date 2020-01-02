@@ -1,0 +1,446 @@
+cch:
+  swipe: true
+  swipe_amount: '30'
+resources:
+  - type: js
+    url: /local/custom-lovelace/card-mod.js
+  - type: js
+    url: /local/custom-lovelace/alarm_control_panel-card/alarm_control_panel-card.js
+  - type: js
+    url: /community_plugin/monster-card/monster-card.js
+  - type: module
+    url: >-
+      /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=1.3.1
+  - type: js
+    url: /community_plugin/vertical-stack-in-card/vertical-stack-in-card.js
+  - type: js
+    url: /community_plugin/list-card/list-card.js
+  - type: module
+    url: /community_plugin/garbage-collection-card/garbage-collection-card.js
+title: Home
+views:
+  - !include /config/lovelace/views/home_view.yaml
+  - badges: []
+    cards:
+      - cards:
+          - entities:
+              - alarm_control_panel.visonic_alarm
+              - input_boolean.mode_absence
+              - binary_sensor.visonic_z10
+              - binary_sensor.visonic_z01
+              - binary_sensor.visonic_z11
+              - binary_sensor.visonic_z12
+              - binary_sensor.visonic_z02
+              - binary_sensor.visonic_z14
+              - binary_sensor.visonic_z13
+              - binary_sensor.visonic_z08
+              - binary_sensor.visonic_z09
+              - binary_sensor.visonic_z05
+              - binary_sensor.visonic_z04
+              - binary_sensor.visonic_z03
+              - binary_sensor.visonic_z06
+            show_state: false
+            style: |
+              ha-card {
+                font-size: 12px;
+                padding: 0px 0px 0px 0px  !important;
+                margin: 0px 0px 0px 0px  !important;
+              }
+              .entity {
+                margin: -5px 0 0px 0 !important;
+                padding:0px;
+                font-size: 12px;
+              }
+              .name { 
+                white-space: pre-line !important;
+               height: 4em !important;
+              }
+              state-badge {
+                margin:-10px 0 0 0 !important;
+              }
+
+              .entities.no-header {
+              padding:0 0 0 0 !important;
+              }
+              hui-glance-card {
+                margin:0px 0px 0px 0px !important; 
+                border: none !important;
+              }
+            theme: visonic-sensor
+            type: glance
+          - cards:
+              - card:
+                  columns: 3
+                  show_state: false
+                  style: |
+                    ha-card {
+                      font-size: 12px;
+                      padding: 0px 0px 0px 0px  !important;
+                      margin: 0px 0px 0px 0px  !important;
+                      border-shadow: none !important;
+                      border: none !important;
+
+                    }
+                    .entity {
+                      margin: -5px 0 8px 0 !important;
+                      padding:0px;
+                      font-size: 12px;
+                    }
+                    .name { 
+                      white-space: pre-line !important;
+                     height: 4em !important;
+                    }
+                    state-badge {
+                      margin:-10px 0 0 0 !important;
+                      padding:0 0 0 0 !important;
+                    }
+                    .card-header{
+                      font-size: var(--ha-card-header-font-size, 16px);
+                      padding: 8px 8px 0px;  !important;
+                      margin: 0px 0px 0px 0px  !important;
+                    }
+                    .entities.no-header {
+                    padding:0 0 0 0 !important;
+                    }
+                    hui-glance-card {
+                      margin:0px 0px 0px 0px !important;
+                      border: none !important;
+                      border-shadow: none !important;
+
+                    }          
+                    :host {
+                      margin:0px 0px 0px 0px !important;
+                      border: none !important;
+                      border-shadow: none !important;
+                    }
+                  theme: visonic-sensor
+                  type: glance
+                filter:
+                  exclude:
+                    - attributes:
+                        device_armed: 'False'
+                      entity_id: binary_sensor.visonic*
+                  include:
+                    - entity_id: binary_sensor.visonic*
+                      options:
+                        icon: 'mdi:shield-remove'
+                        tap_action:
+                          action: call-service
+                          service: visonic.alarm_sensor_bypass
+                          service_data:
+                            bypass: 'True'
+                            entity_id: this.entity_id
+                      state: 'on'
+                show_empty: false
+                type: 'custom:monster-card'
+              - card:
+                  columns: 3
+                  show_state: false
+                  style: |
+                    ha-card {
+                      font-size: 12px;
+                      padding: 0px 0px 0px 0px  !important;
+                      margin: 0px 0px 0px 0px  !important;
+                    }
+                    .entity {
+                      margin: -5px 0 8px 0 !important;
+                      padding:0px;
+                      font-size: 12px;
+                    }
+                    .name { 
+                      white-space: pre-line !important;
+                     height: 4em !important;
+                    }
+                    state-badge {
+                      margin:-10px 0 0 0 !important;
+                    }
+                    .card-header{
+                      font-size: var(--ha-card-header-font-size, 16px);
+                      padding: 8px 8px 0px;  !important;
+                      margin: 0px 0px 0px 0px  !important;
+                    }
+                    .entities.no-header {
+                    padding:0 0 0 0 !important;
+                    }
+                    hui-glance-card {
+                      margin:0px 0px 0px 0px !important;
+                      border: none !important;
+                      border-shadow: none !important;
+
+                    }
+                    :host {
+                      margin:0px 0px 0px 0px !important;
+                      border: none !important;
+                      border-shadow: none !important;
+                    }                
+                  theme: visonic-bypassed
+                  type: glance
+                filter:
+                  include:
+                    - attributes:
+                        device_armed: 'False'
+                      entity_id: binary_sensor.visonic*
+                      options:
+                        icon: 'mdi:shield-plus'
+                        style: |
+                          ha-card {
+                            margin:0px 0px 0px 0px !important;
+                            border: none !important;
+                            border-shadow: none !important;
+                          }                
+                        tap_action:
+                          action: call-service
+                          service: visonic.alarm_sensor_bypass
+                          service_data:
+                            bypass: 'False'
+                            entity_id: this.entity_id
+                show_empty: false
+                type: 'custom:monster-card'
+            type: horizontal-stack
+          - card:
+              columns: 5
+              show_state: false
+              style: |
+                ha-card {
+                  font-size: 12px;
+                  padding: 0px 0px 0px 0px  !important;
+                  margin: 0px 0px 0px 0px  !important;
+                  border-shadow: none !important;
+                  border: none !important;
+
+                }
+                .entity {
+                  margin: -5px 0 8px 0 !important;
+                  padding:0px;
+                  font-size: 12px;
+                }
+                .name { 
+                  white-space: pre-line !important;
+                 height: 4em !important;
+                }
+                state-badge {
+                  margin:-10px 0 0 0 !important;
+                  padding:0 0 0 0 !important;
+                }
+                .card-header{
+                  font-size: var(--ha-card-header-font-size, 16px);
+                  padding: 8px 8px 0px;  !important;
+                  margin: 0px 0px 0px 0px  !important;
+                }
+                .entities.no-header {
+                padding:0 0 0 0 !important;
+                }
+                hui-glance-card {
+                  margin:0px 0px 0px 0px !important;
+                  border: none !important;
+                  border-shadow: none !important;
+
+                }          
+                :host {
+                  margin:0px 0px 0px 0px !important;
+                  border: none !important;
+                  border-shadow: none !important;
+                }
+                hui-glance-card {
+                  margin:0px 0px 0px 0px !important;
+                  border: none !important;
+                }                
+              theme: visonic-lowbattery
+              type: glance
+            filter:
+              include:
+                - attributes:
+                    battery_level: 0
+                  entity_id: binary_sensor.visonic*
+                  options:
+                    icon: 'mdi:battery-10'
+                    tap_action:
+                      action: call-service
+                      service: visonic.alarm_sensor_bypass
+                      service_data:
+                        bypass: 'True'
+                        entity_id: this.entity_id
+            show_empty: false
+            type: 'custom:monster-card'
+          - entity: alarm_control_panel.visonic_alarm
+            states:
+              - arm_away
+              - arm_home
+            type: alarm-panel
+        style: |
+          ha-card {
+            font-size: 12px;
+            padding: 0px 0px 0px 0px  !important;
+            margin: 0px 0px 0px 0px  !important;
+          }
+
+          hui-glance-card {
+            margin:0px 0px 0px 0px !important;
+            border: none !important;
+          }
+        type: 'custom:vertical-stack-in-card'
+      - entities:
+          - input_boolean.mode_absence
+          - input_boolean.notify_visonic_ext
+          - input_boolean.notify_visonic_int
+          - input_boolean.notify_visonic_all
+        icon: []
+        show_header_toggle: true
+        style: |
+          ha-card {
+            font-size: 12px;
+            padding: 0px 0px 0px 0px  !important;
+            margin: 0px 0px 0px 0px  !important;
+          }
+        title: Notifications PushOver
+        type: entities
+      - cards:
+          - entities:
+              - sensor.poubelle
+              - sensor.carton
+              - sensor.verre
+              - sensor.vegetaux
+              - sensor.encombrants
+            show_state: true
+            type: glance
+        type: horizontal-stack
+      - cards:
+          - entity: binary_sensor.washer_on
+            icon: 'mdi:washing-machine'
+            type: entity-button
+          - entity: switch.powerplug_12a_switch_1
+            type: entity-button
+          - entity: switch.powerplug_12a_switch_1
+            style: |
+              ha-card {
+                font-variant: small-caps;
+              }
+              .card-header {
+                font-size: 16px;
+              }        
+            type: entity-button
+        type: horizontal-stack
+    panel: false
+    path: default_view
+    title: Home
+  - badges: []
+    cards:
+      - entities:
+          - camera.onvifcam
+        type: entities
+      - entity: camera.besdercam
+        type: picture-entity
+      - card:
+          style: |
+            ha-card {
+              font-size: 12px;
+              padding: 0px 0px 0px 0px  !important;
+              margin: 0px 0px 0px 0px  !important;
+            }
+            .entity {
+              margin: 0px 0 0px 0;
+              padding:0px;
+              font-size: 12px;
+            }
+            .name { 
+              white-space: pre-line !important;
+             height: 4em !important;
+            }
+            state-badge {
+              margin:0 0 0 0 !important;
+            }
+            .card-header{
+              font-size: var(--ha-card-header-font-size, 16px);
+             // padding: 8px 8px 0px;  !important;
+              //margin: 0px 0px 0px 0px  !important;
+            }
+            .entities.no-header {
+            padding:0 0 0 0 !important;
+            }
+            hui-glance-card {
+              margin:0px 0px 0px 0px !important;
+              border: none !important;
+            }          
+          title: Bypass
+          type: glance
+        filter:
+          exclude:
+            - attributes:
+                device_armed: 'False'
+              entity_id: binary_sensor.visonic*
+          include:
+            - entity_id: binary_sensor.visonic*
+              options:
+                tap_action:
+                  action: call-service
+                  service: visonic.alarm_sensor_bypass
+                  service_data:
+                    bypass: 'True'
+                    entity_id: this.entity_id
+              state: 'on'
+        show_empty: false
+        type: 'custom:monster-card'
+      - card:
+          style: |
+            ha-card {
+              font-size: 12px;
+              padding: 0px 0px 0px 0px  !important;
+              margin: 0px 0px 0px 0px  !important;
+            }
+            .entity {
+              margin: 0px 0 0px 0;
+              padding:0px;
+              font-size: 12px;
+            }
+            .name { 
+              white-space: pre-line !important;
+             height: 4em !important;
+            }
+            state-badge {
+              margin:0 0 0 0 !important;
+            }
+            .card-header{
+              font-size: var(--ha-card-header-font-size, 16px);
+              padding: 8px 8px 0px;  !important;
+            }
+            .entities.no-header {
+            padding:0 0 0 0 !important;
+            }
+            hui-glance-card {
+              margin:0px 0px 0px 0px !important;
+              border: none !important;
+            }          
+          title: Rearm
+          type: glance
+        filter:
+          include:
+            - attributes:
+                device_armed: 'False'
+              entity_id: binary_sensor.visonic*
+              options:
+                tap_action:
+                  action: call-service
+                  service: visonic.alarm_sensor_bypass
+                  service_data:
+                    bypass: 'False'
+                    entity_id: this.entity_id
+        show_empty: false
+        type: 'custom:monster-card'
+    panel: false
+    title: Camera
+  - badges:
+      - sensor.hacs
+    cards:
+      - columns:
+          - field: name
+            title: Name
+          - field: installed version
+            title: Installed
+          - field: available version
+            title: Latest
+        entity: sensor.hacs
+        feed_attribute: repositories
+        title: HA Community Store
+        type: 'custom:list-card'
+    path: system
+    title: System

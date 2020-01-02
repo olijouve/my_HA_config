@@ -1,0 +1,130 @@
+title: Lights
+path: lights
+cards:
+  - type: entities
+    title: Escaliers
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.grp_escalier
+        icon: mdi:ceiling-light 
+        name: 1er et 2ème étage
+      - type: "custom:light-entity-row"
+        entity: light.palier1er
+        icon: mdi:ceiling-light  
+        name: 1er étage 
+      - type: "custom:light-entity-row"
+        entity: light.palier2eme
+        icon: mdi:ceiling-light  
+        name: 2ème étage
+
+  - type: entities
+    title: Entrée
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.entree
+        icon: mdi:ceiling-light  # optional
+        name: Plafonnier      # optional
+
+  - type: entities
+    title: Salon
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.applique_salon
+        icon: mdi:coach-lamp  # optional
+        name: Applique      # optional
+
+  - type: entities
+    title: Bureau
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.bureau
+        icon: mdi:ceiling-light  # optional
+        name: Bureau      # optional
+
+  - type: entities
+    title: Cuisine
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.cuisine_plafonnier
+        icon: mdi:vanity-light  # optional
+        name: Spots      # optional
+      - type: "custom:light-entity-row"
+        entity: light.cuisine_evier
+        icon: mdi:track-light  # optional
+        name: Evier      # optional
+
+  - type: entities
+    title: Chambre 3
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.chambre3
+        icon: mdi:ceiling-light  # optional
+        name: Plafonnier      # optional
+      - type: "custom:light-entity-row"
+        entity: light.veilleuse_warm
+        icon: mdi:brightness-4  # optional
+        name: Veilleuse      # optional
+      - type: "custom:light-entity-row"
+        entity: light.veilleuse_rgb
+        showColorPicker: false # shows color picker if supported
+        showColorSliders: false # shows hue/saturation sliders if supported
+        buttons:        # optional
+          - name: Rose
+            service_data:
+              color_name: pink
+          - name: Rouge
+            service_data:
+              color_name: red
+          - name: Orange
+            service_data:
+              color_name: orange        
+          - name: Jaune
+            service_data:
+              color_name: yellow        
+          - name: Vert
+            service_data:
+              color_name: green        
+          - name: Bleu
+            service_data:
+              color_name: blue        
+          - name: Indigo
+            service_data:
+              color_name: indigo        
+          - name: Violet
+            service_data:
+              color_name: purple        
+        icon: mdi:brightness-4  # optional
+        name: Veilleuse couleur     # optional
+
+  - type: entities
+    title: Chambre 1
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.chambre1
+        icon: mdi:ceiling-light  # optional
+        name: Plafonnier      # optional
+
+  - type: entities
+    title: Chambre 2
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.chambre2
+        icon: mdi:ceiling-light  # optional
+        name: Plafonnier      # optional
+
+
+  - type: entities
+    title: Buanderie
+    show_header_toggle: false
+    entities:
+      - type: "custom:light-entity-row"
+        entity: light.buanderie
+        icon: mdi:ceiling-light  # optional
+        name: Plafonnier      # optional

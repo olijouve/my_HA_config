@@ -1,0 +1,33 @@
+type: glance
+columns: 4
+entities:
+  - sensor.temperature_entree
+  - sensor.temperature_salon
+  - sensor.temperature_bureau
+  - sensor.temperature_buanderie
+  - sensor.temperature_cuisine
+  - sensor.temperature_palier1er
+  - sensor.temperature_chambre1
+  - sensor.temperature_chambre2
+  - sensor.temperature_grenier
+  - sensor.temperature_chambre3
+  - sensor.temperature_sdb
+  - sensor.temperature_palier2eme
+  - sensor.temperature_garage
+
+
+
+style: |
+  ha-card {
+    padding: 0px 0px 0px 0px  !important;
+    margin: 0px 0px 0px 0px  !important;
+  }
+  .entity {
+    margin: 0px 0 20px 0 !important;
+    padding:0px !important;
+  }
+ 
+  state-badge {
+    margin-bottom:-35px 0 0px 0 !important;
+  }
+ 

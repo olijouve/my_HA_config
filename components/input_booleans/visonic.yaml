@@ -1,0 +1,25 @@
+mode_absence:
+  name: Mode Absence
+  icon: mdi:shield-airplane
+  
+test_condition:
+  name: Test Condition
+  
+test_group_visonic_all:
+  name: Test Group visonic_all
+test_group_visonic_int:
+  name: Test Group visonic_int
+test_group_visonic_ext:
+  name: Test Group visonic_ext
+
+notify_visonic_ext:
+  name: Visonic Ext (Z10 Z11 Z12 Z08 Z09)
+  
+notify_visonic_int:
+  name: Visonic Int (Z01 Z02 Z03 Z04 Z13 Z14)
+
+notify_visonic_all:
+  name: Visonic All
+  
+notify_visonic_pir_int:
+  name: Visonic Int (Z05 Z06)

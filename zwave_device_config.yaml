@@ -1,0 +1,12 @@
+sensor.shenzhen_neo_electronics_co_ltd_power_plug_12a_alarm_type:
+  ignored: false
+  polling_intensity: 0
+sensor.shenzhen_neo_electronics_co_ltd_power_plug_12a_interval_3:
+  ignored: false
+  polling_intensity: 0
+sensor.shenzhen_neo_electronics_co_ltd_power_plug_12a_voltage:
+  ignored: false
+  polling_intensity: 0
+switch.shenzhen_neo_electronics_co_ltd_power_plug_12a_switch:
+  ignored: false
+  polling_intensity: 0
