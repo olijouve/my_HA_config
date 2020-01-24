@@ -6,10 +6,9 @@ panel: false
 title: Camera
 
 cards:
-   
 
   - type: "custom:camera-card"
-    entity: camera.camera_stream
+    entity: camera.foscam
     camera_view: live
     
 #  - type: picture-glance
@@ -24,53 +23,151 @@ cards:
       - type: horizontal-stack
         cards:
           - type: entity-button
-            entity: camera.onvifcam
-            icon: mdi:arrow-up-bold-outline
+            entity: camera.foscam
+            icon: mdi:magnify-minus-outline
             show_name: false
             tap_action:
               action: call-service
-              service: camera.onvif_ptz
+              service: onvif.onvif_ptz_move
               service_data:
+                entity_id: camera.foscam
                 zoom: ZOOM_OUT
                 move_mode: ContinuousMove
+                continuous_timeout: 0.8
+                distance: 1
           - type: entity-button
-            entity: camera.onvifcam
+            entity: camera.foscam
             icon: mdi:arrow-up-bold-outline
             show_name: false
             tap_action:
               action: call-service
-              service: camera.onvif_ptz
+              service: onvif.onvif_ptz_move
               service_data:
+                entity_id: camera.foscam
                 tilt: UP
                 move_mode: ContinuousMove
+                continuous_timeout: 0.8
+                distance: 1
+          - type: entity-button
+            entity: camera.foscam
+            icon: mdi:magnify-plus-outline
+            show_name: false
+            tap_action:
+              action: call-service
+              service: onvif.onvif_ptz_move
+              service_data:
+                entity_id: camera.foscam
+                zoom: ZOOM_IN
+                move_mode: ContinuousMove
+                continuous_timeout: 0.8
+                distance: 1
       - type: horizontal-stack
         cards:
           - type: entity-button
-            entity: camera.onvifcam
+            entity: camera.foscam
             icon: mdi:arrow-left-bold-outline
             show_name: false
             tap_action:
               action: call-service
-              service: camera.onvif_ptz
+              service: onvif.onvif_ptz_move
               service_data:
+                entity_id: camera.foscam
                 pan: LEFT
+                move_mode: ContinuousMove
+                continuous_timeout: 0.8
+                distance: 1
           - type: entity-button
-            entity: camera.onvifcam
+            entity: camera.foscam
             icon: mdi:arrow-right-bold-outline
             show_name: false
             tap_action:
               action: call-service
-              service: camera.onvif_ptz
+              service: onvif.onvif_ptz_move
               service_data:
+                entity_id: camera.foscam
                 pan: RIGHT
+                move_mode: ContinuousMove
+                continuous_timeout: 0.8
+                distance: 1
       - type: horizontal-stack
         cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: camera.foscam
+                icon: mdi:home
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: onvif.onvif_ptz_preset
+                  entity_id: camera.foscam
+                  service_data:
+                    preset_operation: GotoHomePosition
+              - type: entity-button
+                entity: camera.foscam
+                icon: mdi:home-map-marker
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: onvif.onvif_ptz_preset
+                  service_data:
+                    entity_id: camera.foscam
+                    preset_operation: SetHomePosition
           - type: entity-button
-            entity: camera.onvifcam
+            entity: camera.foscam
             icon: mdi:arrow-down-bold-outline
             show_name: false
             tap_action:
               action: call-service
-              service: camera.onvif_ptz
+              service: onvif.onvif_ptz_move
               service_data:
+                entity_id: camera.foscam
                 tilt: DOWN
+                move_mode: ContinuousMove
+                continuous_timeout: 0.8
+                distance: 1
+
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: camera.foscam
+                icon: mdi:home-map-marker
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: onvif.onvif_ptz_preset
+                  service_data:
+                    preset_operation: GetPresets
+              - type: entity-button
+                entity: camera.foscam
+                icon: mdi:home
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: onvif.onvif_ptz_preset
+                  service_data:
+                    preset_operation: GotoHomePosition
+      - type: horizontal-stack
+        cards:
+          - type: entities
+            show_name: false
+            show_header_toggle: false
+            entities:
+              - input_select.presets
+
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                show_name: false
+                show_header_toggle: false
+                entities:
+                  - input_text.set_preset_name
+              - type: entity-button
+                entity: camera.foscam
+                icon: mdi:wunderlist
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: onvif.onvif_ptz_preset
+                  service_data:
+                    preset_operation: SetPreset

@@ -1,0 +1,140 @@
+type: picture-elements
+entity: camera.foscam
+camera_image:  camera.foscam_cgi
+camera_view: live
+elements:
+  - type: icon
+    icon: "mdi:arrow-up"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 25px
+      bottom: 50px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_advanced_move
+      service_data:
+        entity_id: camera.foscam
+        ptz_vector: [0, 0.1, 0]
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+  - type: icon
+    icon: "mdi:arrow-down"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 25px
+      bottom: 0px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_move
+      service_data:
+        entity_id: camera.foscam
+        tilt: DOWN
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+        distance: 1
+  - type: icon
+    icon: "mdi:arrow-left"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 50px
+      bottom: 25px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_move
+      service_data:
+        entity_id: camera.foscam
+        pan: LEFT
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+        distance: 1
+  - type: icon
+    icon: "mdi:arrow-right"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 0px
+      bottom: 25px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_move
+      service_data:
+        entity_id: camera.foscam
+        pan: RIGHT
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+        distance: 1
+  - type: icon
+    icon: "mdi:arrow-top-left"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 50px
+      bottom: 50px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_move
+      service_data:
+        entity_id: camera.foscam
+        tilt: UP
+        pan: LEFT
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+        distance: 1
+  - type: icon
+    icon: "mdi:arrow-top-right"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 0px
+      bottom: 50px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_move
+      service_data:
+        entity_id: camera.foscam
+        tilt: UP
+        pan: RIGHT
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+        distance: 1
+  - type: icon
+    icon: "mdi:arrow-bottom-left"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 50px
+      bottom: 0px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_move
+      service_data:
+        entity_id: camera.foscam
+        tilt: DOWN
+        pan: LEFT
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+        distance: 1
+  - type: icon
+    icon: "mdi:arrow-bottom-right"
+    style:
+      background: "rgba(255, 255, 255, 0.5)"
+      right: 0px
+      bottom: 0px
+    tap_action:
+      action: call-service
+      service: onvif.onvif_ptz_move
+      service_data:
+        entity_id: camera.foscam
+        tilt: DOWN
+        pan: RIGHT
+        move_mode: ContinuousMove
+        continuous_timeout: 0.8
+        distance: 1
+#  - type: image
+#    style:
+#      top: 70%
+#      left: 10%
+#      width: 10%
+#    entity: input_select.set_preset_name
+#    state_image:
+#      "TopMost": /local/ll_matte_home.png
+#      "BottomMost": /local/ll_matte_home.png
+#      "LeftMost": /local/ll_matte_not_home.png
+#      "RightMost": /local/ll_matte_not_home.png
+#      "cuisine": /local/ll_matte_not_home.png

@@ -42,7 +42,7 @@ from functools import partial
 from typing import Callable, List
 from collections import namedtuple
 
-PLUGIN_VERSION = "0.3.4.9"
+PLUGIN_VERSION = "0.3.5.3"
 
 # Maximum number of CRC errors on receiving data from the alarm panel before performing a restart
 MAX_CRC_ERROR = 5
@@ -72,13 +72,13 @@ KEEP_ALIVE_PERIOD = 25  # Seconds
 DOWNLOAD_TIMEOUT = 180
 
 # Number of seconds delay between trying to achieve EPROM download
-DOWNLOAD_RETRY_DELAY = 240
+DOWNLOAD_RETRY_DELAY = 90
 
 # Number of seconds delay between trying to achieve powerlink (must have achieved download first)
 POWERLINK_RETRY_DELAY = 180
 
 # Number of seconds between trying to achieve powerlink (must have achieved download first) and giving up. Better to be half way between retry delays
-POWERLINK_TIMEOUT = 104.5 * POWERLINK_RETRY_DELAY
+POWERLINK_TIMEOUT = 4.5 * POWERLINK_RETRY_DELAY
 
 PanelSettings = {
    "MotionOffDelay"       : 120,
@@ -298,13 +298,13 @@ pmLogEvent_t = {
            "Interior Restore", "Perimeter Restore", "Delay Restore", "24h Silent Restore", "24h Audible Restore",
            "Tamper Restore", "Control Panel Tamper Restore", "Tamper Restore", "Tamper Restore", "Communication Restore",
            "Cancel Alarm", "General Restore", "Trouble Restore", "Not used", "Recent Close", "Fire", "Fire Restore",
-           "No Active", "Emergency", "No used", "Disarm Latchkey", "Panic Restore", "Supervision (Inactive)",
+           "Not Active", "Emergency", "Remove User", "Disarm Latchkey", "Confirm Alarm Emergency", "Supervision (Inactive)",
            "Supervision Restore (Active)", "Low Battery", "Low Battery Restore", "AC Fail", "AC Restore",
            "Control Panel Low Battery", "Control Panel Low Battery Restore", "RF Jamming", "RF Jamming Restore",
            "Communications Failure", "Communications Restore", "Telephone Line Failure", "Telephone Line Restore",
            "Auto Test", "Fuse Failure", "Fuse Restore", "Keyfob Low Battery", "Keyfob Low Battery Restore", "Engineer Reset",
            "Battery Disconnect", "1-Way Keypad Low Battery", "1-Way Keypad Low Battery Restore", "1-Way Keypad Inactive",
-           "1-Way Keypad Restore Active", "Low Battery", "Clean Me", "Fire Trouble", "Low Battery", "Battery Restore",
+           "1-Way Keypad Restore Active", "Low Battery Ack", "Clean Me", "Fire Trouble", "Low Battery", "Battery Restore",
            "AC Fail", "AC Restore", "Supervision (Inactive)", "Supervision Restore (Active)", "Gas Alert", "Gas Alert Restore",
            "Gas Trouble", "Gas Trouble Restore", "Flood Alert", "Flood Alert Restore", "X-10 Trouble", "X-10 Trouble Restore",
            "Arm Home", "Arm Away", "Quick Arm Home", "Quick Arm Away", "Disarm", "Fail To Auto-Arm", "Enter To Test Mode",
@@ -313,10 +313,19 @@ pmLogEvent_t = {
            "Not Sys Event", "Not Sys Event", "Extreme Hot Alert", "Extreme Hot Alert Restore", "Freeze Alert",
            "Freeze Alert Restore", "Human Cold Alert", "Human Cold Alert Restore", "Human Hot Alert",
            "Human Hot Alert Restore", "Temperature Sensor Trouble", "Temperature Sensor Trouble Restore",
-           # new values partition models
-           "PIR Mask", "PIR Mask Restore", "", "", "", "", "", "", "", "", "", "",
-           "Alarmed", "Restore", "Alarmed", "Restore", "", "", "", "", "", "", "", "", "", "",
-           "", "", "", "", "", "Exit Installer", "Enter Installer", "", "", "", "", "" ),
+           #110
+           # New values for PowerMaster and models with partitions
+           "PIR Mask", "PIR Mask Restore", "Repeater low battery", "Repeater low battery restore", "Repeater inactive", 
+           "Repeater inactive restore", "Repeater tamper", "Repeater tamper restore", "Siren test end", "Devices test end", 
+           "One way comm. trouble", "One way comm. trouble restore",
+           #122
+           "Sensor outdoor alarm", "Sensor outdoor restore", "Guard sensor alarmed", "Guard sensor alarmed restore", 
+           "Date time change", "System shutdown", "System power up", "Missed Reminder", "Pendant test fail", "Basic KP inactive", 
+           "Basic KP inactive restore", "Basic KP tamper", "Basic KP tamper Restore", 
+           #135
+           "Heat", "Heat restore", "LE Heat Trouble", "CO alarm", "CO alarm restore", "CO trouble", "CO trouble restore", 
+           "Exit Installer", "Enter Installer", "Self test trouble", "Self test restore", "Confirm panic event", "n/a", "Soak test fail",
+           "Fire Soak test fail", "Gas Soak test fail", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a"),
    "NL" : (
            "Geen", "In alarm", "In alarm", "In alarm", "In alarm", "In alarm",
            "Sabotage alarm", "Systeem sabotage", "Sabotage alarm", "Add user", "Communicate fout", "Paniekalarm",
@@ -364,8 +373,9 @@ pmLogEvent_t = {
            "", "", "", "", "", "Sortir Mode Installeur", "Entrer Mode Installeur", "", "", "", "", "" )
 }
 
-pmLogUser_t = {
-  "EN" : [ "System ", "Zone 01", "Zone 02", "Zone 03", "Zone 04", "Zone 05", "Zone 06", "Zone 07", "Zone 08",
+
+pmLogPowerMaxUser_t = {
+  "EN" : [ "System", "Zone 01", "Zone 02", "Zone 03", "Zone 04", "Zone 05", "Zone 06", "Zone 07", "Zone 08",
            "Zone 09", "Zone 10", "Zone 11", "Zone 12", "Zone 13", "Zone 14", "Zone 15", "Zone 16", "Zone 17", "Zone 18",
            "Zone 19", "Zone 20", "Zone 21", "Zone 22", "Zone 23", "Zone 24", "Zone 25", "Zone 26", "Zone 27", "Zone 28",
            "Zone 29", "Zone 30", "Fob  01", "Fob  02", "Fob  03", "Fob  04", "Fob  05", "Fob  06", "Fob  07", "Fob  08",
@@ -404,6 +414,98 @@ pmLogUser_t = {
            "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown",
            "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown",
            "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", 
+           "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"]
+}
+
+pmLogPowerMasterUser_t = {
+  "EN" : [ "System", "Zone 01", "Zone 02", "Zone 03", "Zone 04", "Zone 05", "Zone 06", "Zone 07", "Zone 08",
+           "Zone 09", "Zone 10", "Zone 11", "Zone 12", "Zone 13", "Zone 14", "Zone 15", "Zone 16", "Zone 17", "Zone 18",
+           "Zone 19", "Zone 20", "Zone 21", "Zone 22", "Zone 23", "Zone 24", "Zone 25", "Zone 26", "Zone 27", "Zone 28",
+           "Zone 29", "Zone 30", "Zone 31", "Zone 32", "Zone 33", "Zone 34", "Zone 35", "Zone 36", "Zone 37", "Zone 38",
+           "Zone 39", "Zone 40", "Zone 41", "Zone 42", "Zone 43", "Zone 44", "Zone 45", "Zone 46", "Zone 47", "Zone 48",
+           "Zone 49", "Zone 50", "Zone 51", "Zone 52", "Zone 53", "Zone 54", "Zone 55", "Zone 56", "Zone 57", "Zone 58",
+           "Zone 59", "Zone 60", "Zone 61", "Zone 62", "Zone 63", "Zone 64", 
+           "Fob  01", "Fob  02", "Fob  03", "Fob  04", "Fob  05", "Fob  06", "Fob  07", "Fob  08", "Fob  09", "Fob  10", 
+           "Fob  11", "Fob  12", "Fob  13", "Fob  14", "Fob  15", "Fob  16", "Fob  17", "Fob  18", "Fob  19", "Fob  20", 
+           "Fob  21", "Fob  22", "Fob  23", "Fob  24", "Fob  25", "Fob  26", "Fob  27", "Fob  28", "Fob  29", "Fob  30", 
+           "Fob  31", "Fob  32",
+           "User 01", "User 02", "User 03", "User 04", "User 05", "User 06", "User 07", "User 08", "User 09", "User 10", 
+           "User 11", "User 12", "User 13", "User 14", "User 15", "User 16", "User 17", "User 18", "User 19", "User 20", 
+           "User 21", "User 22", "User 23", "User 24", "User 25", "User 26", "User 27", "User 28", "User 29", "User 30", 
+           "User 31", "User 32", "User 33", "User 34", "User 35", "User 36", "User 37", "User 38", "User 39", "User 40", 
+           "User 41", "User 42", "User 43", "User 44", "User 45", "User 46", "User 47", "User 48",            
+           "Pad  01", "Pad  02", "Pad  03", "Pad  04", "Pad  05", "Pad  06", "Pad  07", "Pad  08", "Pad  09", "Pad  10",
+           "Pad  11", "Pad  12", "Pad  13", "Pad  14", "Pad  15", "Pad  16", "Pad  17", "Pad  18", "Pad  19", "Pad  20",
+           "Pad  21", "Pad  22", "Pad  23", "Pad  24", "Pad  25", "Pad  26", "Pad  27", "Pad  28", "Pad  29", "Pad  30",
+           "Pad  31", "Pad  32",
+           "Sir  01", "Sir  02", "Sir  03", "Sir  04", "Sir  05", "Sir  06", "Sir  07", "Sir  08",
+           "2Pad 01", "2Pad 02", "2Pad 03", "2Pad 04", 
+           "X10  01", "X10  02", "X10  03", "X10  04", "X10  05", "X10  06", "X10  07", "X10  08",
+           "X10  09", "X10  10", "X10  11", "X10  12", "X10  13", "X10  14", "X10  15", "PGM    ", "P-LINK ",
+           "PTag 01", "PTag 02", "PTag 03", "PTag 04", "PTag 05", "PTag 06", "PTag 07", "PTag 08", "PTag 09", "PTag 10", 
+           "PTag 11", "PTag 12", "PTag 13", "PTag 14", "PTag 15", "PTag 16", "PTag 17", "PTag 18", "PTag 19", "PTag 20", 
+           "PTag 21", "PTag 22", "PTag 23", "PTag 24", "PTag 25", "PTag 26", "PTag 27", "PTag 28", "PTag 29", "PTag 30", 
+           "PTag 31", "PTag 32",
+           "Rptr 01", "Rptr 02", "Rptr 03", "Rptr 04", "Rptr 05", "Rptr 06", "Rptr 07", "Rptr 08",
+           "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"],
+  "NL" : [ "Systeem", "Zone 01", "Zone 02", "Zone 03", "Zone 04", "Zone 05", "Zone 06", "Zone 07", "Zone 08",
+           "Zone 09", "Zone 10", "Zone 11", "Zone 12", "Zone 13", "Zone 14", "Zone 15", "Zone 16", "Zone 17", "Zone 18",
+           "Zone 19", "Zone 20", "Zone 21", "Zone 22", "Zone 23", "Zone 24", "Zone 25", "Zone 26", "Zone 27", "Zone 28",
+           "Zone 29", "Zone 30", "Zone 31", "Zone 32", "Zone 33", "Zone 34", "Zone 35", "Zone 36", "Zone 37", "Zone 38",
+           "Zone 39", "Zone 40", "Zone 41", "Zone 42", "Zone 43", "Zone 44", "Zone 45", "Zone 46", "Zone 47", "Zone 48",
+           "Zone 49", "Zone 50", "Zone 51", "Zone 52", "Zone 53", "Zone 54", "Zone 55", "Zone 56", "Zone 57", "Zone 58",
+           "Zone 59", "Zone 60", "Zone 61", "Zone 62", "Zone 63", "Zone 64", 
+           "Fob  01", "Fob  02", "Fob  03", "Fob  04", "Fob  05", "Fob  06", "Fob  07", "Fob  08", "Fob  09", "Fob  10", 
+           "Fob  11", "Fob  12", "Fob  13", "Fob  14", "Fob  15", "Fob  16", "Fob  17", "Fob  18", "Fob  19", "Fob  20", 
+           "Fob  21", "Fob  22", "Fob  23", "Fob  24", "Fob  25", "Fob  26", "Fob  27", "Fob  28", "Fob  29", "Fob  30", 
+           "Fob  31", "Fob  32",
+           "Gebruiker 01", "Gebruiker 02", "Gebruiker 03", "Gebruiker 04", "Gebruiker 05", "Gebruiker 06", "Gebruiker 07", "Gebruiker 08", "Gebruiker 09", "Gebruiker 10", 
+           "Gebruiker 11", "Gebruiker 12", "Gebruiker 13", "Gebruiker 14", "Gebruiker 15", "Gebruiker 16", "Gebruiker 17", "Gebruiker 18", "Gebruiker 19", "Gebruiker 20", 
+           "Gebruiker 21", "Gebruiker 22", "Gebruiker 23", "Gebruiker 24", "Gebruiker 25", "Gebruiker 26", "Gebruiker 27", "Gebruiker 28", "Gebruiker 29", "Gebruiker 30", 
+           "Gebruiker 31", "Gebruiker 32", "Gebruiker 33", "Gebruiker 34", "Gebruiker 35", "Gebruiker 36", "Gebruiker 37", "Gebruiker 38", "Gebruiker 39", "Gebruiker 40", 
+           "Gebruiker 41", "Gebruiker 42", "Gebruiker 43", "Gebruiker 44", "Gebruiker 45", "Gebruiker 46", "Gebruiker 47", "Gebruiker 48",            
+           "Pad  01", "Pad  02", "Pad  03", "Pad  04", "Pad  05", "Pad  06", "Pad  07", "Pad  08", "Pad  09", "Pad  10",
+           "Pad  11", "Pad  12", "Pad  13", "Pad  14", "Pad  15", "Pad  16", "Pad  17", "Pad  18", "Pad  19", "Pad  20",
+           "Pad  21", "Pad  22", "Pad  23", "Pad  24", "Pad  25", "Pad  26", "Pad  27", "Pad  28", "Pad  29", "Pad  30",
+           "Pad  31", "Pad  32",
+           "Sir  01", "Sir  02", "Sir  03", "Sir  04", "Sir  05", "Sir  06", "Sir  07", "Sir  08",
+           "2Pad 01", "2Pad 02", "2Pad 03", "2Pad 04", 
+           "X10  01", "X10  02", "X10  03", "X10  04", "X10  05", "X10  06", "X10  07", "X10  08",
+           "X10  09", "X10  10", "X10  11", "X10  12", "X10  13", "X10  14", "X10  15", "PGM    ", "P-LINK ",
+           "PTag 01", "PTag 02", "PTag 03", "PTag 04", "PTag 05", "PTag 06", "PTag 07", "PTag 08", "PTag 09", "PTag 10", 
+           "PTag 11", "PTag 12", "PTag 13", "PTag 14", "PTag 15", "PTag 16", "PTag 17", "PTag 18", "PTag 19", "PTag 20", 
+           "PTag 21", "PTag 22", "PTag 23", "PTag 24", "PTag 25", "PTag 26", "PTag 27", "PTag 28", "PTag 29", "PTag 30", 
+           "PTag 31", "PTag 32",
+           "Rptr 01", "Rptr 02", "Rptr 03", "Rptr 04", "Rptr 05", "Rptr 06", "Rptr 07", "Rptr 08"],
+  "FR" : [ "Système", "Zone 01", "Zone 02", "Zone 03", "Zone 04", "Zone 05", "Zone 06", "Zone 07", "Zone 08",
+           "Zone 09", "Zone 10", "Zone 11", "Zone 12", "Zone 13", "Zone 14", "Zone 15", "Zone 16", "Zone 17", "Zone 18",
+           "Zone 19", "Zone 20", "Zone 21", "Zone 22", "Zone 23", "Zone 24", "Zone 25", "Zone 26", "Zone 27", "Zone 28",
+           "Zone 29", "Zone 30", "Zone 31", "Zone 32", "Zone 33", "Zone 34", "Zone 35", "Zone 36", "Zone 37", "Zone 38",
+           "Zone 39", "Zone 40", "Zone 41", "Zone 42", "Zone 43", "Zone 44", "Zone 45", "Zone 46", "Zone 47", "Zone 48",
+           "Zone 49", "Zone 50", "Zone 51", "Zone 52", "Zone 53", "Zone 54", "Zone 55", "Zone 56", "Zone 57", "Zone 58",
+           "Zone 59", "Zone 60", "Zone 61", "Zone 62", "Zone 63", "Zone 64", 
+           "Memclé  01", "Memclé  02", "Memclé  03", "Memclé  04", "Memclé  05", "Memclé  06", "Memclé  07", "Memclé  08", "Memclé  09", "Memclé  10", 
+           "Memclé  11", "Memclé  12", "Memclé  13", "Memclé  14", "Memclé  15", "Memclé  16", "Memclé  17", "Memclé  18", "Memclé  19", "Memclé  20", 
+           "Memclé  21", "Memclé  22", "Memclé  23", "Memclé  24", "Memclé  25", "Memclé  26", "Memclé  27", "Memclé  28", "Memclé  29", "Memclé  30", 
+           "Memclé  31", "Memclé  32",
+           "User 01", "User 02", "User 03", "User 04", "User 05", "User 06", "User 07", "User 08", "User 09", "User 10", 
+           "User 11", "User 12", "User 13", "User 14", "User 15", "User 16", "User 17", "User 18", "User 19", "User 20", 
+           "User 21", "User 22", "User 23", "User 24", "User 25", "User 26", "User 27", "User 28", "User 29", "User 30", 
+           "User 31", "User 32", "User 33", "User 34", "User 35", "User 36", "User 37", "User 38", "User 39", "User 40", 
+           "User 41", "User 42", "User 43", "User 44", "User 45", "User 46", "User 47", "User 48",            
+           "Pad  01", "Pad  02", "Pad  03", "Pad  04", "Pad  05", "Pad  06", "Pad  07", "Pad  08", "Pad  09", "Pad  10",
+           "Pad  11", "Pad  12", "Pad  13", "Pad  14", "Pad  15", "Pad  16", "Pad  17", "Pad  18", "Pad  19", "Pad  20",
+           "Pad  21", "Pad  22", "Pad  23", "Pad  24", "Pad  25", "Pad  26", "Pad  27", "Pad  28", "Pad  29", "Pad  30",
+           "Pad  31", "Pad  32",
+           "Sir  01", "Sir  02", "Sir  03", "Sir  04", "Sir  05", "Sir  06", "Sir  07", "Sir  08",
+           "2Pad 01", "2Pad 02", "2Pad 03", "2Pad 04", 
+           "X10  01", "X10  02", "X10  03", "X10  04", "X10  05", "X10  06", "X10  07", "X10  08",
+           "X10  09", "X10  10", "X10  11", "X10  12", "X10  13", "X10  14", "X10  15", "PGM    ", "P-LINK ",
+           "PTag 01", "PTag 02", "PTag 03", "PTag 04", "PTag 05", "PTag 06", "PTag 07", "PTag 08", "PTag 09", "PTag 10", 
+           "PTag 11", "PTag 12", "PTag 13", "PTag 14", "PTag 15", "PTag 16", "PTag 17", "PTag 18", "PTag 19", "PTag 20", 
+           "PTag 21", "PTag 22", "PTag 23", "PTag 24", "PTag 25", "PTag 26", "PTag 27", "PTag 28", "PTag 29", "PTag 30", 
+           "PTag 31", "PTag 32",
+           "Rptr 01", "Rptr 02", "Rptr 03", "Rptr 04", "Rptr 05", "Rptr 06", "Rptr 07", "Rptr 08",
            "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown"]
 }
 
@@ -738,8 +840,11 @@ pmZoneSensor_t = {
 ZoneSensorMaster = collections.namedtuple("ZoneSensorMaster", 'name func' )
 pmZoneSensorMaster_t = {
    0x01 : ZoneSensorMaster("Next PG2", "Motion" ),
+   0x03 : ZoneSensorMaster("Clip PG2", "Motion" ),
    0x04 : ZoneSensorMaster("Next CAM PG2", "Camera" ),
+   0x0A : ZoneSensorMaster("TOWER CAM PG2", "Camera" ),
    0x16 : ZoneSensorMaster("SMD-426 PG2", "Smoke" ),
+   0x18 : ZoneSensorMaster("GSD-442 PG2", "Smoke" ),
    0x1A : ZoneSensorMaster("TMD-560 PG2", "Temperature" ),
    0x29 : ZoneSensorMaster("MC-302V PG2", "Magnet"),
    0x2A : ZoneSensorMaster("MC-302 PG2", "Magnet"),
@@ -747,6 +852,8 @@ pmZoneSensorMaster_t = {
    0x35 : ZoneSensorMaster("SD-304 PG2", "Shock"),
    0xFE : ZoneSensorMaster("Wired", "Wired" )
 }
+# SMD-426 PG2 (photoelectric smoke detector)
+# SMD-427 PG2 (heat and photoelectric smoke detector) 
 
 class ElapsedFormatter():
 
@@ -764,6 +871,8 @@ log = logging.getLogger(__name__)
 
 class LogPanelEvent:
     def __init__(self):
+        self.current = None
+        self.total = None
         self.partition = None
         self.time = None
         self.date = None
@@ -772,6 +881,8 @@ class LogPanelEvent:
     def __str__(self):
         strn = ""
         strn = strn + ("part=None" if self.partition == None else "part={0:<2}".format(self.partition))
+        strn = strn + ("    current=None" if self.current == None else "    current={0:<2}".format(self.current))
+        strn = strn + ("    total=None" if self.total == None else "    total={0:<2}".format(self.total))
         strn = strn + ("    time=None" if self.time == None else "    time={0:<2}".format(self.time))
         strn = strn + ("    date=None" if self.date == None else "    date={0:<2}".format(self.date))
         strn = strn + ("    zone=None" if self.zone == None else "    zone={0:<2}".format(self.zone))
@@ -969,9 +1080,12 @@ class ProtocolBase(asyncio.Protocol):
         #    PanelType=7 : PowerMaster10 , Model=32   Powermaster True
         #    PanelType=7 : PowerMaster10 , Model=68   Powermaster True
         #    PanelType=7 : PowerMaster10 , Model=153   Powermaster True
+        #    PanelType=8 : PowerMaster30 , Model=6   Powermaster True     may not be compatible with Powerlink3, not sure about previous powerlink hardware
         #    PanelType=8 : PowerMaster30 , Model=53   Powermaster True
 
         self.PanelType = None
+        # Whether its a powermax or powermaster
+        self.PowerMaster = None
 
         # keep alive counter for the timer 
         self.keep_alive_counter = 0    # only used in keep_alive_and_watchdog_timer
@@ -1181,7 +1295,8 @@ class ProtocolBase(asyncio.Protocol):
             elif not self.giveupTrying and not self.pmDownloadComplete and not self.ForceStandardMode and not self.pmDownloadMode:
                 self.reset_watchdog_timeout()
                 download_counter = download_counter + 1
-                if download_counter >= DOWNLOAD_RETRY_DELAY:  # 4 Minutes
+                log.debug("[Controller] download_counter is {0}".format(download_counter))
+                if download_counter >= DOWNLOAD_RETRY_DELAY:  # 
                     download_counter = 0
                     # trigger a download
                     log.info("[Controller] Trigger Panel Download Attempt")
@@ -1245,22 +1360,23 @@ class ProtocolBase(asyncio.Protocol):
             # Sixth, flush the send queue, send all buffered messages to the panel
             if len(self.SendList) == 0 and not self.pmDownloadMode and self.keep_alive_counter >= KEEP_ALIVE_PERIOD:   #
                 # Every KEEP_ALIVE_PERIOD seconds, unless watchdog has been reset
-                #log.debug("[Controller]   Send list is empty so sending I'm alive message")
+                #log.debug("[Controller]   Send list is empty so sending I'm alive message or get status")
                 # reset counter
                 self.reset_keep_alive_messages()
                 
-                if not self.pmPowerlinkMode:
-                    # Send I'm Alive and request status
-                    self.SendCommand("MSG_ALIVE")
-                # When is standard mode, sending this asks the panel to send us the status so we know that the panel is ok.
-                # When in powerlink mode, it makes no difference as we get the AB messages from the panel, but this also keeps our status updated
                 status_counter = status_counter + 1
-                if status_counter >= 3:  # every twice around the loop i.e every KEEP_ALIVE_PERIOD * 2 seconds
+                if status_counter >= 3:  # around the loop i.e every KEEP_ALIVE_PERIOD * 3 seconds
                     status_counter = 0
-                    if self.pmPowerlinkMode:
-                        self.SendCommand("MSG_RESTORE")  # 
-                    else:
+                    if not self.pmPowerlinkMode:
+                        # When is standard mode, sending this asks the panel to send us the status so we know that the panel is ok.
                         self.SendCommand("MSG_STATUS")  # Asks the panel to send us the A5 message set
+                    elif self.PowerMaster is not None and self.PowerMaster:
+                        # When in powerlink mode and the panel is PowerMaster get the status to make sure the sensor states get updated
+                        #   (if powerlink and powermax panel then no need to keep doing this)
+                        self.SendCommand("MSG_RESTORE")  # 
+                elif not self.pmPowerlinkMode:
+                    # When not in powerlink mode, send I'm Alive to the panel so it knows we're still here 
+                    self.SendCommand("MSG_ALIVE")
             else:
                 # Every 1.0 seconds, try to flush the send queue
                 self.SendCommand(None)  # check send queue
@@ -1626,15 +1742,15 @@ class ProtocolBase(asyncio.Protocol):
                 else:
                     # tried resending once, no point in trying again so reset settings, start from scratch
                     log.info("[SendCommand] Tried Re-Sending last message but didn't work. Assume a powerlink timeout state and resync")
-                    self.ClearList()
-                    self.pmExpectedResponse = []
+                    #self.ClearList()
+                    #self.pmExpectedResponse = []
                     self.triggerRestoreStatus()
             elif len(self.SendList) > 0 and len(self.pmExpectedResponse) == 0: # we are ready to send
                 # pop the oldest item from the list, this could be the only item.
                 instruction = self.SendList.pop(0)
 
                 if len(instruction.response) > 0:
-                    log.debug("[pmSendPdu] Resetting expected response counter, it got to {0}   Response list before {1}  after {2}".format(self.expectedResponseTimeout, len(self.pmExpectedResponse), len(self.pmExpectedResponse) + len(instruction.response)))
+                    log.debug("[pmSendPdu] Resetting expected response counter, it got to {0}   Response list length before {1}  after {2}".format(self.expectedResponseTimeout, len(self.pmExpectedResponse), len(self.pmExpectedResponse) + len(instruction.response)))
                     self.expectedResponseTimeout = 0
                     # update the expected response list straight away (without having to wait for it to be actually sent) to make sure protocol is followed
                     self.pmExpectedResponse.extend(instruction.response) # if an ack is needed it will already be in this list
@@ -1722,15 +1838,18 @@ class PacketHandling(ProtocolBase):
         self.event_callback = event_callback
 
         self.pmPhoneNr_t = {}
+        
+        self.eventCount = 0
         self.pmEventLogDictionary = {}
         # We do not put these pin codes in to the panel status
         self.pmPincode_t = [ ]  # allow maximum of 48 user pin codes
 
-        self.lastSendOfDownloadEprom = self.getTimeFunction() - timedelta(seconds=100)  # take off 100 seconds so the first command goes through immediately
+        secdelay = DOWNLOAD_RETRY_DELAY + 100
+        self.lastSendOfDownloadEprom = self.getTimeFunction() - timedelta(seconds=secdelay)  # take off DOWNLOAD_RETRY_DELAY + 100 seconds so the first command goes through immediately
         
         # Variables to manage the PowerMAster B0 message and the triggering of Motion
-        self.lastRecvOfMasterMotionData = self.getTimeFunction() - timedelta(seconds=100)  # take off 100 seconds so the first command goes through immediately
-        self.firstRecvOfMasterMotionData = self.getTimeFunction() - timedelta(seconds=100)  # take off 100 seconds so the first command goes through immediately
+        self.lastRecvOfMasterMotionData = self.getTimeFunction() - timedelta(seconds=secdelay)  # take off 100 seconds so the first command goes through immediately
+        self.firstRecvOfMasterMotionData = self.getTimeFunction() - timedelta(seconds=secdelay)  # take off 100 seconds so the first command goes through immediately
         self.zoneNumberMasterMotion = 0
         self.zoneDataMasterMotion = bytearray(b'')
         
@@ -1772,8 +1891,7 @@ class PacketHandling(ProtocolBase):
         self.pmSilentPanic = False
         self.lastPacket = None
         self.lastPacketCounter = 0
-        # Whether its a powermax or powermaster
-        self.PowerMaster = True
+        self.sensorsCreated = False
         
         # determine when MSG_ENROLL is sent to the panel
         self.doneAutoEnroll = False
@@ -1999,6 +2117,7 @@ class PacketHandling(ProtocolBase):
             log.info("[Process Settings] pmPanelTypeNr {0} ({1})    model {2}".format(pmPanelTypeNr, self.PanelType, PanelStatus["Model"]))
             if self.PanelType is None:
                 self.PanelType = pmPanelTypeNr
+                self.PowerMaster = (self.PanelType >= 7) 
         else:
             log.error("[Process Settings] Lookup of panel type string and model from the EPROM failed, assuming EPROM download failed")
             #self.dump_settings()
@@ -2201,6 +2320,8 @@ class PacketHandling(ProtocolBase):
                                 del self.pmSensorDev_t[i]
                                 #self.pmSensorDev_t[i] = None # remove zone if needed
 
+                self.sensorsCreated = True
+
                 # ------------------------------------------------------------------------------------------------------------------------------------------------
                 # Process PGM/X10 settings
                 setting = self.pmReadSettings(pmDownloadItem_t["MSG_DL_PGMX10"])
@@ -2371,7 +2492,7 @@ class PacketHandling(ProtocolBase):
             self.handle_msgtype3F(packet[2:-2])
         elif packet[1] == 0xa0: # Event log
             self.handle_msgtypeA0(packet[2:-2])
-        elif packet[1] == 0xa3: # Event log
+        elif packet[1] == 0xa3: # Zone Names
             self.handle_msgtypeA3(packet[2:-2])
         elif packet[1] == 0xa5: # General Event
             self.handle_msgtypeA5(packet[2:-2])
@@ -2386,7 +2507,8 @@ class PacketHandling(ProtocolBase):
         elif packet[1] == 0xac: # X10 Names
             self.handle_msgtypeAC(packet[2:-2])
         elif packet[1] == 0xb0: # PowerMaster Event
-            self.handle_msgtypeB0(packet[2:-2])
+            if not self.pmDownloadMode:   # only process when not downloading EPROM
+                self.handle_msgtypeB0(packet[2:-2])  
         else:
             log.info("[handle_packet] Unknown/Unhandled packet type " + self.toString(packet))
 
@@ -2409,6 +2531,18 @@ class PacketHandling(ProtocolBase):
                     self.allowAckToTriggerRestore = False
 
 
+    def delayDownload(self):
+        self.pmDownloadMode = False
+        self.giveupTrying = False
+        self.pmDownloadComplete = False
+        # exit download mode and try again in DOWNLOAD_RETRY_DELAY seconds
+        self.SendCommand("MSG_STOP")
+        self.SendCommand("MSG_EXIT")
+        self.triggerRestoreStatus()
+        # Assume that we are not in Powerlink as we haven't completed download yet. 
+        PanelStatus["Mode"] = "Standard"
+
+
     def handle_msgtype06(self, data):
         """ MsgType=06 - Time out
         Timeout message from the PM, most likely we are/were in download mode """
@@ -2418,10 +2552,8 @@ class PacketHandling(ProtocolBase):
         self.pmExpectedResponse = []
 
         if self.pmDownloadMode:
-            self.pmDownloadMode = False
-            # exit download mode and try again in DOWNLOAD_RETRY_DELAY seconds
-            self.SendCommand("MSG_STOP")
-            self.SendCommand("MSG_EXIT")
+            self.delayDownload()
+            log.info("[handle_msgtype06] Timeout Received - Going to Standard Mode and going to try download again soon")
         else:
             self.SendAck()
 
@@ -2459,12 +2591,7 @@ class PacketHandling(ProtocolBase):
         # Format: <MsgType> <?> <?> <delay in sec>
         iDelay = data[2]
         log.info("[handle_msgtype25] Download Retry, have to wait {0} seconds     data is {1}".format(iDelay, self.toString(data)))        
-        # exit download mode
-        self.pmDownloadMode = False
-        #sleep(iDelay + 1)
-        # exit download mode and try again in DOWNLOAD_RETRY_DELAY seconds
-        self.SendCommand("MSG_STOP")
-        self.SendCommand("MSG_EXIT")
+        self.delayDownload()
 
 
     def handle_msgtype33(self, data):
@@ -2496,16 +2623,19 @@ class PacketHandling(ProtocolBase):
         self.PanelType = data[5]
 
         self.PowerMaster = (self.PanelType >= 7)
-        modelname = pmPanelType_t[self.PanelType] or "UNKNOWN"  # INTERFACE set this in the user interface
+        PanelStatus["Model"] = pmPanelType_t[self.PanelType] if self.PanelType in pmPanelType_t else "UNKNOWN"   # INTERFACE : PanelType set to model
+        
+        #modelname = pmPanelType_t[self.PanelType] or "UNKNOWN"  # INTERFACE set this in the user interface
 
         PanelStatus["Model Type"] = self.ModelType
         PanelStatus["Power Master"] = 'Yes' if self.PowerMaster else 'No'
 
-        log.debug("[handle_msgtype3C] PanelType={0} : {2} , Model={1}   Powermaster {3}".format(self.PanelType, self.ModelType, modelname, self.PowerMaster))
+        log.debug("[handle_msgtype3C] PanelType={0} : {2} , Model={1}   Powermaster {3}".format(self.PanelType, self.ModelType, PanelStatus["Model"], self.PowerMaster))
 
         # We got a first response, now we can Download the panel EPROM settings
         interval = self.getTimeFunction() - self.lastSendOfDownloadEprom
-        td = timedelta(seconds=90)  # prevent multiple requests for the EPROM panel settings, at least 90 seconds 
+        td = timedelta(seconds=DOWNLOAD_RETRY_DELAY)  # prevent multiple requests for the EPROM panel settings, at least DOWNLOAD_RETRY_DELAY seconds 
+        log.debug("[handle_msgtype3C] interval={0}  td={1}   self.lastSendOfDownloadEprom={2}    timenow={3}".format(interval, td, self.lastSendOfDownloadEprom, self.getTimeFunction()))
         if interval > td:
             self.lastSendOfDownloadEprom = self.getTimeFunction()
             self.pmReadPanelSettings(self.PowerMaster)
@@ -2554,13 +2684,13 @@ class PacketHandling(ProtocolBase):
 
     def handle_msgtypeA0(self, data):
         """ MsgType=A0 - Event Log """
-        log.info("[handle_MsgTypeA0] Packet = {0}".format(self.toString(data)))
+        log.debug("[handle_MsgTypeA0] Packet = {0}".format(self.toString(data)))
         
         eventNum = data[1]
         # Check for the first entry, it only contains the number of events
         if eventNum == 0x01:
             log.debug("[handle_msgtypeA0] Eventlog received")
-            self.eventCount = data[0]
+            self.eventCount = data[0] - 1   ## the number of messages (including this one) minus 1
         else:
             iSec = data[2]
             iMin = data[3]
@@ -2571,7 +2701,15 @@ class PacketHandling(ProtocolBase):
 
             iEventZone = data[8]
             iLogEvent = data[9]
-            zoneStr = pmLogUser_t[self.pmLang][iEventZone] or "UNKNOWN"
+            
+            zoneStr = ""
+            if self.PowerMaster is not None:
+                if self.PowerMaster:
+                    zoneStr = pmLogPowerMasterUser_t[self.pmLang][iEventZone] or "UNKNOWN"
+                else:
+                    iEventZone = int(iEventZone & 0x7F)
+                    zoneStr = pmLogPowerMaxUser_t[self.pmLang][iEventZone] or "UNKNOWN"
+                
             eventStr = pmLogEvent_t[self.pmLang][iLogEvent] or "UNKNOWN"
 
             idx = eventNum - 1
@@ -2591,9 +2729,9 @@ class PacketHandling(ProtocolBase):
             self.pmEventLogDictionary[idx].date = "{0:0>2}/{1:0>2}/{2}".format(iDay, iMonth, iYear)
             self.pmEventLogDictionary[idx].zone = zoneStr
             self.pmEventLogDictionary[idx].event = eventStr
-            #self.pmEventLogDictionary.items = idx
-            #self.pmEventLogDictionary.done = (eventNum == self.eventCount)
-            log.debug("[handle_msgtypeA0] Log Event {0}".format(self.pmEventLogDictionary[idx]))
+            self.pmEventLogDictionary[idx].total = self.eventCount
+            self.pmEventLogDictionary[idx].current = idx
+            # log.debug("[handle_msgtypeA0] Log Event {0}".format(self.pmEventLogDictionary[idx]))
             
             # Send the event log in to HA
             self.sendResponseEvent ( self.pmEventLogDictionary[idx] )
@@ -2647,7 +2785,7 @@ class PacketHandling(ProtocolBase):
 
         log.debug("[handle_msgtypeA5] Parsing A5 packet " + self.toString(data))
 
-        if eventType == 0x01: # Zone alarm status
+        if self.sensorsCreated and eventType == 0x01: # Zone alarm status
             log.debug("[handle_msgtypeA5] Zone Alarm Status")
             val = self.makeInt(data[2:6])
             if val != self.zonealarm_old:
@@ -2667,7 +2805,7 @@ class PacketHandling(ProtocolBase):
                         self.pmSensorDev_t[i].ztamper = (val & (1 << i) != 0)
                         self.pmSensorDev_t[i].pushChange()
 
-        elif eventType == 0x02: # Status message - Zone Open Status
+        elif self.sensorsCreated and eventType == 0x02: # Status message - Zone Open Status
             # if in standard mode then use this A5 status message to reset the watchdog timer        
             if not self.pmPowerlinkMode:
                 log.debug("[handle_msgtypeA5]      Got A5 02 message, resetting watchdog")
@@ -2695,7 +2833,7 @@ class PacketHandling(ProtocolBase):
                         self.pmSensorDev_t[i].lowbatt = (val & (1 << i) != 0)
                         self.pmSensorDev_t[i].pushChange()
 
-        elif eventType == 0x03: # Tamper Event
+        elif self.sensorsCreated and eventType == 0x03: # Tamper Event
             val = self.makeInt(data[2:6])
             log.debug("[handle_msgtypeA5]      Trigger (Inactive) Status Zones 32-01: {:032b}".format(val))
             # This status is different from the status in the 0x02 part above i.e they are different values.
@@ -2862,9 +3000,10 @@ class PacketHandling(ProtocolBase):
                             self.pmSensorDev_t[key].status = False
                             self.pmSensorDev_t[key].pushChange()
                         elif eventType == 5: # Zone Violated
-                            self.pmSensorDev_t[key].triggered = True
-                            self.pmSensorDev_t[key].triggertime = self.getTimeFunction()
-                            self.pmSensorDev_t[key].pushChange()
+                            if not self.pmSensorDev_t[key].triggered:
+                                self.pmSensorDev_t[key].triggertime = self.getTimeFunction()
+                                self.pmSensorDev_t[key].triggered = True
+                                self.pmSensorDev_t[key].pushChange()
                         #elif eventType == 6: # Panic Alarm
                         #elif eventType == 7: # RF Jamming
                         #elif eventType == 8: # Tamper Open
@@ -2926,10 +3065,11 @@ class PacketHandling(ProtocolBase):
                         # it is not enrolled and we already know about it from the EPROM, set enrolled to False
                         self.pmSensorDev_t[i].enrolled = False
 
+                self.sensorsCreated = True
                 self.sendResponseEvent ( visonic_devices )
 
             val = self.makeInt(data[6:10])
-            if val != self.bypass_old:
+            if self.sensorsCreated and val != self.bypass_old:
                 log.debug("[handle_msgtypeA5]      Bypassed Zones 32-01: {:032b}".format(val))
                 self.bypass_old = val
                 for i in range(0, 32):
@@ -2980,15 +3120,24 @@ class PacketHandling(ProtocolBase):
             log.debug("[handle_msgtypeA7]      A7 message contains {0} messages".format(msgCnt))
             for i in range(0, msgCnt):
                 eventZone = int(data[2 + (2 * i)])
-                eventZone = int(eventZone & 0x7F)
                 logEvent  = int(data[3 + (2 * i)])
-                eventType = int(logEvent & 0x7F)
-                s = (pmLogEvent_t[self.pmLang][eventType] or "UNKNOWN") + " / " + (pmLogUser_t[self.pmLang][eventZone] or "UNKNOWN")
+                eventType = logEvent  # int(logEvent & 0x7F)
+
+                zoneStr = ""                
+                if self.PowerMaster is not None:
+                    if self.PowerMaster:
+                        zoneStr = pmLogPowerMasterUser_t[self.pmLang][eventZone] or "UNKNOWN"
+                    else:
+                        eventZone = int(eventZone & 0x7F)
+                        zoneStr = pmLogPowerMaxUser_t[self.pmLang][eventZone] or "UNKNOWN"
+                
+                s = (pmLogEvent_t[self.pmLang][eventType] or "UNKNOWN") + " / " + zoneStr
 
                 #---------------------------------------------------------------------------------------
                 alarmStatus = None
                 if eventType in pmPanelAlarmType_t:
                     alarmStatus = pmPanelAlarmType_t[eventType]
+                
                 troubleStatus = None
                 if eventType in pmPanelTroubleType_t:
                     troubleStatus = pmPanelTroubleType_t[eventType]
@@ -3050,7 +3199,7 @@ class PacketHandling(ProtocolBase):
     # pmHandlePowerlink (0xAB)
     def handle_msgtypeAB(self, data): # PowerLink Message
         """ MsgType=AB - Panel Powerlink Messages """
-        log.info("[handle_msgtypeAB]  data {0}".format(self.toString(data)))
+        log.debug("[handle_msgtypeAB]  data {0}".format(self.toString(data)))
 
         # Restart the timer
         self.reset_watchdog_timeout()
@@ -3124,7 +3273,7 @@ class PacketHandling(ProtocolBase):
         log.info("[handle_msgtypeB0] Received {0} message {1}/{2} (len = {3})    full data = {4}".format(PanelStatus["Model"] or "UNKNOWN", msgType, subType, msgLen, self.toString(data)))
         #  Received PowerMaster30 message 3/36 (len = 26)   full data = 03 24 1a ff 08 ff 15 00 00 00 00 00 00 00 00 26 35 12 15 03 00 14 03 01 00 81 00 00 0a 43
         
-        if not self.pmDownloadMode and msgType == 0x03 and subType == 0x39:
+        if msgType == 0x03 and subType == 0x39:
             # Movement detected (probably)
             #  Received PowerMaster10 message 3/57 (len = 6)    full data = 03 39 06 ff 08 ff 01 24 0b 43
             #  Received PowerMaster30 message 3/57 (len = 8)    full data = 03 39 08 ff 08 ff 03 18 24 4b 90 43
@@ -3172,11 +3321,13 @@ class PacketHandling(ProtocolBase):
                                 s2 = self.zoneDataMasterMotion[7 + z]
                                 log.debug("[handle_msgtypeB0]             Zone {0}  Motion State Before {1}   After {2}".format(z, s2, s1))
                                 if s1 != s2:
-                                    log.debug("[handle_msgtypeB0]             Triggered Motion Detection")
+                                    log.debug("[handle_msgtypeB0]             Pre-Triggered Motion Detection to set B0 zone")
                                     self.zoneNumberMasterMotion = True   # this means we wait at least 'min_interval' seconds for the next trigger
-                                    self.pmSensorDev_t[z].triggered = True
-                                    self.pmSensorDev_t[z].triggertime = self.getTimeFunction()
-                                    self.pmSensorDev_t[z].pushChange()
+                                    if not self.pmSensorDev_t[z].triggered:
+                                        log.debug("[handle_msgtypeB0]             Triggered Motion Detection")
+                                        self.pmSensorDev_t[z].triggertime = self.getTimeFunction()
+                                        self.pmSensorDev_t[z].triggered = True
+                                        self.pmSensorDev_t[z].pushChange()
                             #else:
                             #    s = data[7 + z]
                             #    log.debug("[handle_msgtypeB0]           Zone {0}  is not a motion stype   State = {1}".format(z, s))
@@ -3281,7 +3432,7 @@ class EventHandling(PacketHandling):
     async def process_command_queue(self):
         while not self.suspendAllOperations:
             command = await self.command_queue.get()
-            if command[0] == "log":
+            if command[0] == "eventlog":
                 log.debug("[CommandQueue]  Calling event log")
                 self.GetEventLog(command[1])
             elif command[0] == "bypass":
@@ -3386,15 +3537,17 @@ class EventHandling(PacketHandling):
     def GetEventLog(self, pin = ""):
         """ Get Panel Event Log """
         log.info("GetEventLog")
+        self.eventCount = 0
+        self.pmEventLogDictionary = {}
         if not self.pmDownloadMode:
             isValidPL, bpin = self.pmGetPin(pin)
             if isValidPL:
                 self.SendCommand("MSG_EVENTLOG", options=[4, bpin])
                 return True
             else:
-                log.info("Get Event Log not allowed, invalid pin")
+                log.warning("Get Event Log not allowed, invalid pin")
         else:
-            log.info("Get Event Log only supported when not downloading EPROM.")
+            log.warning("Get Event Log only supported when not downloading EPROM.")
         return False
 
     def SendX10Command(self, dev, state):

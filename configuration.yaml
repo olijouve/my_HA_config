@@ -25,31 +25,45 @@ climate: !include components/thermostats.yaml
 logger:
   default: error
   logs:
-    #homeassistant.components.homekit: debug
-    #pyhap: debug
-    #homeassistant.helpers.intent: debug
-    #homeassistant.components.snips: debug
     #custom_components.visonic: debug
     #custom_components.visonic.pyvisonic: debug
     #custom_components.visonic.alarm_control_panel: debug
     #custom_components.visonic.binary_sensor: debug
     #custom_components.visonic.switch: debug
     #custom_components.visonic.__init__: debug
-    #homeassistant.components.onvif.camera: debug
-    #homeassistant.components.camera: debug
-    #zeep.asyncio.transport: debug
-    #zeep.asyncio: debug
-    homeassistant.components.homekit: debug
-    pyhap: debug
+
+    homeassistant.components.onvif.camera: debug
+    homeassistant.components.camera: debug
+    zeep.asyncio.transport: debug
+    zeep.asyncio: debug
+    custom_components.onvif2: debug
+    libav.generic: debug
+
+    #homeassistant.components.homekit: error
+    #pyhap: error
+
+    pydeconz: debug
+    homeassistant.components.deconz: debug    
+
+
+input_select:
+  preset_name:
+    name: Preset Name
+    options:
+      - TopMost
+      - BottomMost
+      - LeftMost
+      - RightMost
+      - cuisine
+
+stream:
+camera: !include components/cameras.yaml
 
 visonic: !include components/visonic.yaml
 
 influxdb: !include components/influxdb.yaml
 
 meteo_france: !include components/meteo_france.yaml
-  
-stream:
-camera: !include components/cameras.yaml
 
 garbage_collection: !include components/garbage_collection.yaml
 
@@ -62,7 +76,7 @@ binary_sensor: !include_dir_merge_list components/binary_sensors/
 
 # visonic notify buttons...
 input_boolean: !include_dir_merge_named components/input_booleans/
- 
+
 homekit: 
   auto_start: false
   filter:

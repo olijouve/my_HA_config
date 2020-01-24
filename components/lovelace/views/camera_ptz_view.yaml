@@ -1,0 +1,10 @@
+
+
+badges: []
+path: camera_ptz_foscam
+panel: false
+title: Camera PTZ
+
+cards:
+
+  - !include /config/components/lovelace/cards/ptz_foscam.yaml

@@ -1,0 +1,15 @@
+
+# custom linky with card
+#- platform: linky_custom
+# username: !secret linky_username
+# password: !secret linky_password
+# peak_hours:
+#    - ["00:00","24:00"]
+# peak_hours_cost: 0.09429
+# offpeak_hours_cost: 0.09429
+
+# native linky
+#linky:
+#  - username: !secret linky_username
+#    password: !secret linky_password
+#

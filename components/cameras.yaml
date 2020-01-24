@@ -1,23 +1,53 @@
-- platform: onvif
-  host: 192.168.1.104
-  port: 80
-  name: onvifcam
-  profile: 0
-  username:  admin
-  
-- platform: generic
-  name: camera_stream
-  still_image_url: "http://192.168.1.104:554/snapshot"
-  #stream_source: "rtsp://admin:@192.168.1.15:554/0/av2"
-  stream_source: "rtsp://admin:@192.168.1.104:554/0/video1"
-  username:  admin
-  verify_ssl: false
- 
-#  - platform: onvif
-#    host: 192.168.1.15  
-#    port: 80
-#    name: onvifcam
-#    profile: 1
+#- platform: onvif
+#  host: 192.168.1.104
+#  port: 80
+#  name: onvifcam
+#  profile: 0
+#  username:  admin
+#  
+#- platform: generic
+#  name: camera_stream
+#  still_image_url: "http://192.168.1.104:554/snapshot"
+#  #stream_source: "rtsp://admin:@192.168.1.15:554/0/av2"
+#  stream_source: "rtsp://admin:@192.168.1.104:554/0/video1"
+#  username:  admin
+#  verify_ssl: false
+
+  - platform: onvif
+    host: 192.168.1.16
+    port: 888
+    name: foscam
+    profile: 1 # lowest compression lowest lag
+    rtsp_transport: "UDP" # UDP best perf no lag
+    username: !secret foscam_username
+    password: !secret foscam_password
+    continuous_timeout_compliance: False
+
+  - platform: foscam
+    name: foscam_cgi
+    ip: 192.168.1.16
+    username: !secret foscam_username
+    password: !secret foscam_password
+
+  - platform: onvif
+    host: 192.168.1.104
+    port: 80
+    name: besder
+    profile: 0 # highest compression lowest lag
+    rtsp_transport: "RTSP" # 1 RTSP~=UDP - 0
+    username: !secret besder_username
+    password: !secret besder_password
+    continuous_timeout_compliance: False
+
+#- platform: foscam
+#- platform: onvif2
+##host: 192.168.1.16
+##port: 888
+##name: onvifcam
+##profile: 1
+##username: "foscam"
+#password: "pwd4iotcam"
+
 #    ptz_speed: 0.5
 #    pan: 0.5
 #    tilt: 0.5
