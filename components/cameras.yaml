@@ -39,14 +39,6 @@
     password: !secret besder_password
     continuous_timeout_compliance: False
 
-#- platform: foscam
-#- platform: onvif2
-##host: 192.168.1.16
-##port: 888
-##name: onvifcam
-##profile: 1
-##username: "foscam"
-#password: "pwd4iotcam"
 
 #    ptz_speed: 0.5
 #    pan: 0.5
